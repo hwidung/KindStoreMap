@@ -1,4 +1,4 @@
-package org.hwiwon.myapplication
+package com.konkuk.kindmap
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

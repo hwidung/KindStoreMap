@@ -3,16 +3,19 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
+    // kapt
+    id("org.jetbrains.kotlin.kapt")
+
     // ktlint
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
 }
 
 android {
-    namespace = "org.hwiwon.myapplication"
+    namespace = "com.konkuk.kindmap"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "org.hwiwon.myapplication"
+        applicationId = "com.konkuk.kindmap"
         minSdk = 34
         targetSdk = 35
         versionCode = 1

@@ -1,4 +1,4 @@
-package org.hwiwon.myapplication
+package com.konkuk.kindmap
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry

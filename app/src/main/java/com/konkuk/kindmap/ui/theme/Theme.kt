@@ -1,4 +1,4 @@
-package org.hwiwon.myapplication.ui.theme
+package com.konkuk.kindmap.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
