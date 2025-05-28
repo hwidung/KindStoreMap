@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -35,11 +36,18 @@ fun Greeting(
     name: String,
     modifier: Modifier = Modifier,
 ) {
-    Text(
-        text = "Hello $name!",
-        color = KindMapTheme.colors.orange,
-        modifier = modifier,
-    )
+    Column(modifier = modifier) {
+        Text(
+            text = "Hello $name!\n한국어도 잘 적용될까?",
+            color = KindMapTheme.colors.orange,
+            style = KindMapTheme.typography.body_b_14,
+        )
+        Text(
+            text = "착한 가게 지도",
+            color = KindMapTheme.colors.yellow,
+            style = KindMapTheme.typography.cafe24_50,
+        )
+    }
 }
 
 @Preview(showBackground = true)

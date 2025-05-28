@@ -17,21 +17,21 @@ object KindMapTheme {
         @ReadOnlyComposable
         get() = LocalKindMapColors.current
 
-    /*
-    val typography: LINKareerTypography
+    val typography: KindMapTypography
         @Composable
         @ReadOnlyComposable
-        get() = LocalLINKareerTypography.current
-     */
+        get() = LocalKindMapTypo.current
 }
 
 @Composable
 fun ProvideKindMapColorsAndTypography(
     colors: KindMapColors,
+    typography: KindMapTypography,
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
         LocalKindMapColors provides colors,
+        LocalKindMapTypo provides typography,
         content = content,
     )
 }
@@ -43,7 +43,10 @@ fun KindMapTheme(
 ) {
     val view = LocalView.current
 
-    ProvideKindMapColorsAndTypography(colors = kindMapColors) {
+    ProvideKindMapColorsAndTypography(
+        colors = kindMapColors,
+        typography = kindMapTypography,
+    ) {
         if (!view.isInEditMode) {
             SideEffect {
                 (view.context as Activity).window.run {
@@ -53,7 +56,6 @@ fun KindMapTheme(
             }
         }
         MaterialTheme(
-            typography = Typography,
             content = content,
         )
     }
