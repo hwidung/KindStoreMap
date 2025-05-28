@@ -11,14 +11,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.konkuk.kindmap.ui.theme.MyApplicationTheme
+import com.konkuk.kindmap.ui.theme.KindMapTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MyApplicationTheme {
+            KindMapTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
@@ -37,6 +37,7 @@ fun Greeting(
 ) {
     Text(
         text = "Hello $name!",
+        color = KindMapTheme.colors.orange,
         modifier = modifier,
     )
 }
@@ -44,7 +45,7 @@ fun Greeting(
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MyApplicationTheme {
+    KindMapTheme {
         Greeting("Android")
     }
 }
