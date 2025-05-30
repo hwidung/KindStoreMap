@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.konkuk.kindmap.main.MainScreen
 import com.konkuk.kindmap.splash.SplashScreen
 import com.konkuk.kindmap.ui.theme.KindMapTheme
 import kotlinx.coroutines.delay
@@ -40,8 +41,7 @@ class MainActivity : ComponentActivity() {
                     if (showSplash) {
                         SplashScreen(innerPaddingValues = innerPadding)
                     } else {
-                        Greeting(name = "휘원")
-                        // LoginScreen(innerPaddingValues = innerPadding)
+                        MainScreen(innerPaddingValues = innerPadding)
                     }
                 }
             }
