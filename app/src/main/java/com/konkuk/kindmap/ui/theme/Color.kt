@@ -15,6 +15,16 @@ data class KindMapColors(
     // Primary
     val orange: Color,
     val yellow: Color,
+    // Marker
+    val markerSkyBlue: Color,
+    val markerOrange:Color,
+    val markerYellow:Color,
+    val markerRed:Color,
+    val markerGreen:Color,
+    val markerDeepBlue:Color,
+    val markerMintBlue:Color,
+    val markerPink:Color,
+    val markerPurple:Color,
 )
 
 val kindMapColors =
@@ -28,6 +38,15 @@ val kindMapColors =
         // Primary
         orange = Color(0xFFFD9F28),
         yellow = Color(0xFFFFCD4B),
+        markerSkyBlue = Color(0xFF00B9FF),
+        markerOrange = Color(0xFFFF8E00),
+        markerYellow = Color(0xFFFDB728),
+        markerRed = Color(0xFFFF5858),
+        markerGreen = Color(0xFF4CC334),
+        markerDeepBlue = Color(0xFF3470C3),
+        markerMintBlue = Color(0xFF00C8DB),
+        markerPink = Color(0xFFE74FE7),
+        markerPurple = Color(0xFF8E4FE7),
     )
 
 val LocalKindMapColors = staticCompositionLocalOf { kindMapColors }
