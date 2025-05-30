@@ -1,5 +1,6 @@
 package com.konkuk.kindmap.ui.theme
 
+import android.R.attr.fontFamily
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
@@ -11,6 +12,7 @@ import androidx.compose.ui.unit.sp
 import com.konkuk.kindmap.R
 
 val cafe24 = FontFamily(Font(R.font.cafe24))
+val suiteExtraBold = FontFamily(Font(R.font.suite_extra_bold))
 val suiteBold = FontFamily(Font(R.font.suite_bold))
 val suiteRegular = FontFamily(Font(R.font.suite_regular))
 val suiteMedium = FontFamily(Font(R.font.suite_medium))
@@ -23,9 +25,12 @@ val lineHeightStyle =
 
 @Immutable
 data class KindMapTypography(
-    // main
+    // main - cafe
     val cafe24_50: TextStyle,
     val cafe24_20: TextStyle,
+    // main - suite
+    val suite_eb_50: TextStyle,
+    val suite_eb_20: TextStyle,
     // head
     val head_b_40: TextStyle,
     // title
@@ -53,6 +58,7 @@ data class KindMapTypography(
 
 val kindMapTypography =
     KindMapTypography(
+
         cafe24_50 =
             TextStyle(
                 fontFamily = cafe24,
@@ -65,6 +71,16 @@ val kindMapTypography =
                 fontSize = 20.sp,
                 lineHeightStyle = lineHeightStyle,
             ),
+        suite_eb_50 = TextStyle(
+            fontFamily = suiteExtraBold,
+            fontSize = 50.sp,
+            lineHeightStyle = lineHeightStyle
+        ),
+        suite_eb_20 = TextStyle(
+            fontFamily = suiteExtraBold,
+            fontSize = 20.sp,
+            lineHeightStyle = lineHeightStyle
+        ),
         // head
         head_b_40 =
             TextStyle(

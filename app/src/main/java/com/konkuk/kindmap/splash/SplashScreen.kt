@@ -41,7 +41,7 @@ fun SplashScreen(
         Spacer(Modifier.height(14.dp))
         Text(
             text = "착한 가게 지도",
-            style = KindMapTheme.typography.cafe24_50,
+            style = KindMapTheme.typography.suite_eb_50,
             color = KindMapTheme.colors.white,
         )
         Spacer(Modifier.height(6.dp))
