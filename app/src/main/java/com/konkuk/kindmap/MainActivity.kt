@@ -1,21 +1,25 @@
 package com.konkuk.kindmap
 
+import android.app.Activity
+import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import com.konkuk.kindmap.splash.SplashScreen
 import com.konkuk.kindmap.ui.theme.KindMapTheme
 import kotlinx.coroutines.delay
@@ -23,11 +27,11 @@ import kotlinx.coroutines.delay
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
         setContent {
+            var showSplash by remember { mutableStateOf(true) }
+            SetTransparentStatusBar()
             KindMapTheme {
-                var showSplash by remember { mutableStateOf(true) }
                 LaunchedEffect(Unit) {
                     delay(2000)
                     showSplash = false
@@ -64,10 +68,19 @@ fun Greeting(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    KindMapTheme {
-        Greeting("Android")
+fun SetTransparentStatusBar() {
+    val view = LocalView.current
+
+    SideEffect {
+        val window = (view.context as Activity).window
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        window.statusBarColor = Color.TRANSPARENT
+        WindowCompat.getInsetsController(window, view).apply {
+            isAppearanceLightStatusBars = true
+            isAppearanceLightNavigationBars = true
+        }
     }
 }

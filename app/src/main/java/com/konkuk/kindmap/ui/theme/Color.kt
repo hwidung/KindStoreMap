@@ -17,14 +17,14 @@ data class KindMapColors(
     val yellow: Color,
     // Marker
     val markerSkyBlue: Color,
-    val markerOrange:Color,
-    val markerYellow:Color,
-    val markerRed:Color,
-    val markerGreen:Color,
-    val markerDeepBlue:Color,
-    val markerMintBlue:Color,
-    val markerPink:Color,
-    val markerPurple:Color,
+    val markerOrange: Color,
+    val markerYellow: Color,
+    val markerRed: Color,
+    val markerGreen: Color,
+    val markerDeepBlue: Color,
+    val markerMintBlue: Color,
+    val markerPink: Color,
+    val markerPurple: Color,
 )
 
 val kindMapColors =

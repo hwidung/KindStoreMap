@@ -58,7 +58,6 @@ data class KindMapTypography(
 
 val kindMapTypography =
     KindMapTypography(
-
         cafe24_50 =
             TextStyle(
                 fontFamily = cafe24,
@@ -71,16 +70,18 @@ val kindMapTypography =
                 fontSize = 20.sp,
                 lineHeightStyle = lineHeightStyle,
             ),
-        suite_eb_50 = TextStyle(
-            fontFamily = suiteExtraBold,
-            fontSize = 50.sp,
-            lineHeightStyle = lineHeightStyle
-        ),
-        suite_eb_20 = TextStyle(
-            fontFamily = suiteExtraBold,
-            fontSize = 20.sp,
-            lineHeightStyle = lineHeightStyle
-        ),
+        suite_eb_50 =
+            TextStyle(
+                fontFamily = suiteExtraBold,
+                fontSize = 50.sp,
+                lineHeightStyle = lineHeightStyle,
+            ),
+        suite_eb_20 =
+            TextStyle(
+                fontFamily = suiteExtraBold,
+                fontSize = 20.sp,
+                lineHeightStyle = lineHeightStyle,
+            ),
         // head
         head_b_40 =
             TextStyle(
