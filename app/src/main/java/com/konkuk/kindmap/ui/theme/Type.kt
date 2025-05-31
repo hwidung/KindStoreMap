@@ -1,6 +1,5 @@
 package com.konkuk.kindmap.ui.theme
 
-import android.R.attr.fontFamily
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
@@ -32,7 +31,7 @@ data class KindMapTypography(
     val suite_eb_50: TextStyle,
     val suite_eb_20: TextStyle,
     // head
-    val head_b_40: TextStyle,
+    val head_b_30: TextStyle,
     // title
     val title_b_24: TextStyle,
     val title_b_22: TextStyle,
@@ -41,7 +40,7 @@ data class KindMapTypography(
     // body
     val body_b_20: TextStyle,
     val body_b_18: TextStyle,
-    val body_b_16: TextStyle,
+    val body_eb_16: TextStyle,
     val body_b_14: TextStyle,
     val body_r_20: TextStyle,
     val body_r_18: TextStyle,
@@ -83,10 +82,10 @@ val kindMapTypography =
                 lineHeightStyle = lineHeightStyle,
             ),
         // head
-        head_b_40 =
+        head_b_30 =
             TextStyle(
                 fontFamily = suiteBold,
-                fontSize = 40.sp,
+                fontSize = 30.sp,
                 fontWeight = FontWeight(700),
                 lineHeight = 50.sp,
                 lineHeightStyle = lineHeightStyle,
@@ -141,11 +140,11 @@ val kindMapTypography =
                 lineHeight = 27.sp,
                 lineHeightStyle = lineHeightStyle,
             ),
-        body_b_16 =
+        body_eb_16 =
             TextStyle(
                 fontFamily = suiteBold,
                 fontSize = 16.sp,
-                fontWeight = FontWeight(700),
+                fontWeight = FontWeight(800),
                 lineHeight = 24.sp,
                 lineHeightStyle = lineHeightStyle,
             ),

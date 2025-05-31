@@ -50,7 +50,7 @@ fun SplashScreen(
                 "치솟는 물가 속 착한 선택을 돕는 지도,\n" +
                     "오늘도 잘 살기 위한 당신의 지도.",
             textAlign = TextAlign.Center,
-            style = KindMapTheme.typography.body_b_16,
+            style = KindMapTheme.typography.body_eb_16,
             color = KindMapTheme.colors.white,
         )
         Spacer(modifier = Modifier.weight(356f))
