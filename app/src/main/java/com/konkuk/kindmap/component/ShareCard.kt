@@ -1,6 +1,6 @@
 package com.konkuk.kindmap.component
 
-import android.R.attr.onClick
+import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,14 +16,20 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
+import androidx.core.view.drawToBitmap
 import coil.compose.AsyncImage
 import com.konkuk.kindmap.R
 import com.konkuk.kindmap.component.type.CategoryChipType
@@ -34,8 +40,11 @@ import com.konkuk.kindmap.ui.theme.KindMapTheme
 fun ShareCard(
     dummyStoreDetail: DummyStoreDetail,
     onDismissRequest: () -> Unit,
+    onSharedClick: (Bitmap) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+    val captureRef = remember { mutableStateOf<ComposeView?>(null) }
     Dialog(
         onDismissRequest = onDismissRequest,
     ) {
@@ -43,75 +52,17 @@ fun ShareCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            Card(
-                modifier = modifier,
-                shape = RoundedCornerShape(10.dp),
-            ) {
-                Column(
-                    modifier = Modifier.background(color = KindMapTheme.colors.white),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Row(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    color = KindMapTheme.colors.yellow,
-                                )
-                                .padding(horizontal = 57.dp, vertical = 10.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            text = "착한 가게 지도",
-                            color = KindMapTheme.colors.white,
-                            style = KindMapTheme.typography.head_b_30,
-                        )
+            AndroidView(
+                factory = { ctx ->
+                    ComposeView(ctx).apply {
+                        captureRef.value = this
+                        setContent {
+                            ShareCardContent(dummyStoreDetail = dummyStoreDetail)
+                        }
                     }
-                    Spacer(Modifier.height(20.dp))
-                    CategoryChip(
-                        categoryChipType = dummyStoreDetail.category,
-                        onClick = {},
-                        isSelected = true,
-                    )
-                    Spacer(Modifier.height(12.dp))
-                    Text(
-                        text = dummyStoreDetail.name,
-                        color = KindMapTheme.colors.gray03,
-                        style = KindMapTheme.typography.head_b_30,
-                    )
-                    Spacer(Modifier.height(20.dp))
-                    if (dummyStoreDetail.imageUrl.isNullOrEmpty()) {
-                        Image(
-                            painter = painterResource(id = R.drawable.cert_img),
-                            contentDescription = null,
-                        )
-                    } else {
-                        AsyncImage(
-                            model = dummyStoreDetail.imageUrl,
-                            contentDescription = null,
-                            modifier =
-                                Modifier
-                                    .padding(horizontal = 70.dp)
-                                    .heightIn(max = 200.dp)
-                                    .background(color = Color.Unspecified, shape = RoundedCornerShape(30)),
-                            placeholder = painterResource(R.drawable.cert_img),
-                            error = painterResource(R.drawable.cert_img),
-                        )
-                    }
-                    Spacer(Modifier.height(25.dp))
-                    dummyStoreDetail.address?.let {
-                        Text(
-                            text = it,
-                            color = KindMapTheme.colors.gray03,
-                            style = KindMapTheme.typography.body_eb_16,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(horizontal = 30.dp),
-                        )
-                    }
-                    Spacer(Modifier.height(40.dp))
-                }
-            }
+                },
+            )
+
             Spacer(Modifier.height(30.dp))
             Row(
                 modifier =
@@ -121,7 +72,12 @@ fun ShareCard(
                             shape = RoundedCornerShape(30),
                         )
                         .padding(horizontal = 13.dp, vertical = 7.dp)
-                        .clickable { },
+                        .clickable {
+                            captureRef.value?.let { composeView ->
+                                val bitmap = composeView.drawToBitmap()
+                                onSharedClick(bitmap)
+                            }
+                        },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
             ) {
@@ -131,6 +87,82 @@ fun ShareCard(
                     style = KindMapTheme.typography.body_r_16,
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun ShareCardContent(
+    dummyStoreDetail: DummyStoreDetail,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(10.dp),
+    ) {
+        Column(
+            modifier = Modifier.background(color = KindMapTheme.colors.white),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Row(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = KindMapTheme.colors.yellow,
+                        )
+                        .padding(horizontal = 57.dp, vertical = 10.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "착한 가게 지도",
+                    color = KindMapTheme.colors.white,
+                    style = KindMapTheme.typography.head_b_30,
+                )
+            }
+            Spacer(Modifier.height(20.dp))
+            CategoryChip(
+                categoryChipType = dummyStoreDetail.category,
+                onClick = {},
+                isSelected = true,
+            )
+            Spacer(Modifier.height(12.dp))
+            Text(
+                text = dummyStoreDetail.name,
+                color = KindMapTheme.colors.gray03,
+                style = KindMapTheme.typography.head_b_30,
+            )
+            Spacer(Modifier.height(20.dp))
+            if (dummyStoreDetail.imageUrl.isNullOrEmpty()) {
+                Image(
+                    painter = painterResource(id = R.drawable.cert_img),
+                    contentDescription = null,
+                )
+            } else {
+                AsyncImage(
+                    model = dummyStoreDetail.imageUrl,
+                    contentDescription = null,
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 70.dp)
+                            .heightIn(max = 200.dp)
+                            .background(color = Color.Unspecified, shape = RoundedCornerShape(30)),
+                    placeholder = painterResource(R.drawable.cert_img),
+                    error = painterResource(R.drawable.cert_img),
+                )
+            }
+            Spacer(Modifier.height(25.dp))
+            dummyStoreDetail.address?.let {
+                Text(
+                    text = it,
+                    color = KindMapTheme.colors.gray03,
+                    style = KindMapTheme.typography.body_eb_16,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 30.dp),
+                )
+            }
+            Spacer(Modifier.height(40.dp))
         }
     }
 }
@@ -150,5 +182,6 @@ private fun ShareCardPrev() {
                 imageUrl = null,
             ),
         onDismissRequest = {},
+        onSharedClick = {},
     )
 }
