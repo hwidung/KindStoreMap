@@ -1,6 +1,7 @@
 package com.konkuk.kindmap.main
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,11 +22,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.konkuk.kindmap.R
 import com.konkuk.kindmap.component.CategoryChip
 import com.konkuk.kindmap.component.DetailBottomSheet
 import com.konkuk.kindmap.component.MarkerChip
+import com.konkuk.kindmap.component.ReviewWebView
 import com.konkuk.kindmap.component.SearchLottieChip
 import com.konkuk.kindmap.component.ShareCard
 import com.konkuk.kindmap.component.type.CategoryChipType
@@ -40,6 +47,7 @@ fun MainScreen(
     var shareDialogVisibility by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf(CategoryChipType.All) }
     var selectedMarker by remember { mutableStateOf<DummyStoreDetail?>(null) }
+    var webViewVisible by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
@@ -83,7 +91,13 @@ fun MainScreen(
                 .padding(innerPaddingValues)
                 .background(color = KindMapTheme.colors.white),
     ) {
-        // Todo : Naver Map 뷰를 구현해주세요.
+        // Todo : Image을 지우고, Naver Map 뷰를 구현해주세요.
+        Image(
+            painter = painterResource(id = R.drawable.dummy_map_img),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize(),
+        )
 
         Row(
             modifier =
@@ -116,7 +130,7 @@ fun MainScreen(
             }
         }
 
-        // Todo : Marker 예시입니다. 참고 후에 지워주세요.
+        // Todo : Marker 예시입니다. 참고 후에 LazyRow을 지워주세요.
         LazyRow(
             modifier =
                 Modifier
@@ -144,5 +158,21 @@ fun MainScreen(
                 )
             }
         }
+
+        // Todo : 웹뷰 테스트입니다. 삭제 예정입니다.
+        Button(
+            onClick = {
+                webViewVisible = true
+            },
+        ) {
+            Text("웹뷰-리뷰 작성하기")
+        }
+    }
+
+    if (webViewVisible) {
+        ReviewWebView(
+            url = "https://goodprice.go.kr/cmnt/reviewList.do",
+            onClose = { webViewVisible = false },
+        )
     }
 }

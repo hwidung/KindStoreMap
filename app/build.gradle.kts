@@ -73,6 +73,9 @@ dependencies {
 
     // Coil
     implementation(libs.coil.compose)
+
+    // WebView
+    implementation(libs.google.accompanist.webview)
 }
 
 ktlint {
