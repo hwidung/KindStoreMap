@@ -16,6 +16,7 @@ import com.konkuk.kindmap.ui.theme.KindMapTheme
 
 @Composable
 fun ShareChip(
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -26,8 +27,7 @@ fun ShareChip(
                     shape = RoundedCornerShape(15),
                 )
                 .padding(horizontal = 20.dp, vertical = 8.dp)
-                .clickable {
-                },
+                .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
@@ -42,5 +42,7 @@ fun ShareChip(
 @Preview
 @Composable
 private fun ShareChipPrev() {
-    ShareChip()
+    ShareChip(
+        onClick = {},
+    )
 }

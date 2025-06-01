@@ -24,6 +24,7 @@ import com.konkuk.kindmap.ui.theme.KindMapTheme
 fun DetailBottomSheet(
     dummyStoreDetail: DummyStoreDetail,
     onDismissRequest: () -> Unit,
+    onSharedClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ModalBottomSheet(
@@ -32,13 +33,14 @@ fun DetailBottomSheet(
         containerColor = KindMapTheme.colors.white,
         scrimColor = KindMapTheme.colors.gray03.copy(alpha = 0.5f),
     ) {
-        DetailBottomSheetContent(dummyStoreDetail)
+        DetailBottomSheetContent(dummyStoreDetail, onSharedClick)
     }
 }
 
 @Composable
 fun DetailBottomSheetContent(
     dummyStoreDetail: DummyStoreDetail,
+    onSharedClick: () -> Unit,
 ) {
     Box(
         modifier =
@@ -123,7 +125,10 @@ fun DetailBottomSheetContent(
             }
         }
         ShareChip(
-            modifier = Modifier.align(Alignment.BottomCenter),
+            modifier =
+                Modifier
+                    .align(Alignment.BottomCenter),
+            onClick = onSharedClick,
         )
     }
 }

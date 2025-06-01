@@ -1,5 +1,6 @@
 package com.konkuk.kindmap.main
 
+import android.R.attr.category
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,6 +23,7 @@ import com.konkuk.kindmap.component.CategoryChip
 import com.konkuk.kindmap.component.DetailBottomSheet
 import com.konkuk.kindmap.component.MarkerChip
 import com.konkuk.kindmap.component.SearchLottieChip
+import com.konkuk.kindmap.component.ShareCard
 import com.konkuk.kindmap.component.type.CategoryChipType
 import com.konkuk.kindmap.model.DummyStoreDetail
 
@@ -31,16 +33,35 @@ fun MainScreen(
     innerPaddingValues: PaddingValues = PaddingValues(0.dp),
 ) {
     var bottomSheetVisibility by remember { mutableStateOf(false) }
+    var shareDialogVisibility by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf(CategoryChipType.All) }
     var selectedMarker by remember { mutableStateOf<DummyStoreDetail?>(null) }
 
-    if (bottomSheetVisibility && selectedMarker != null)
-        {
-            DetailBottomSheet(
-                onDismissRequest = { bottomSheetVisibility = false },
-                dummyStoreDetail = selectedMarker!!,
-            )
-        }
+    if (bottomSheetVisibility && selectedMarker != null) {
+        DetailBottomSheet(
+            onDismissRequest = { bottomSheetVisibility = false },
+            dummyStoreDetail = selectedMarker!!,
+            onSharedClick = {
+                shareDialogVisibility = true
+            },
+        )
+    }
+
+    if (shareDialogVisibility) {
+        ShareCard(
+            dummyStoreDetail =
+                DummyStoreDetail(
+                    id = 1,
+                    category = CategoryChipType.Japanese,
+                    name = "명신 미용실",
+                    address = "서울특별시 광진구 자양로37길 8 (구의동)",
+                    phone = "453-2774",
+                    description = "가격이 저렴하다고 해서 실력이 모자라는 건 절대아닙니다\\r\\n20년전통과 기술로 만족을 드립니다.",
+                    imageUrl = null,
+                ),
+            onDismissRequest = { shareDialogVisibility = false },
+        )
+    }
 
     Box(
         modifier =
