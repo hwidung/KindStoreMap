@@ -19,16 +19,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.konkuk.kindmap.component.CategoryChip
+import com.konkuk.kindmap.component.DetailBottomSheet
 import com.konkuk.kindmap.component.MarkerChip
 import com.konkuk.kindmap.component.SearchLottieChip
 import com.konkuk.kindmap.component.type.CategoryChipType
+import com.konkuk.kindmap.model.DummyStoreDetail
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
     innerPaddingValues: PaddingValues = PaddingValues(0.dp),
 ) {
+    var bottomSheetVisibility by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf(CategoryChipType.All) }
+    var selectedMarker by remember { mutableStateOf<DummyStoreDetail?>(null) }
+
+    if (bottomSheetVisibility && selectedMarker != null)
+        {
+            DetailBottomSheet(
+                onDismissRequest = { bottomSheetVisibility = false },
+                dummyStoreDetail = selectedMarker!!,
+            )
+        }
 
     Box(
         modifier =
@@ -79,7 +91,22 @@ fun MainScreen(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             items(CategoryChipType.entries) { category ->
-                MarkerChip(categoryChipType = category)
+                MarkerChip(
+                    categoryChipType = category,
+                    onClick = { marker ->
+                        selectedMarker =
+                            DummyStoreDetail(
+                                id = 1,
+                                category = category,
+                                name = "명신 미용실",
+                                address = "서울특별시 광진구 자양로37길 8 (구의동)",
+                                phone = "453-2774",
+                                description = "가격이 저렴하다고 해서 실력이 모자라는 건 절대아닙니다\\r\\n20년전통과 기술로 만족을 드립니다.",
+                                imageUrl = null,
+                            )
+                        bottomSheetVisibility = true
+                    },
+                )
             }
         }
     }

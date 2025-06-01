@@ -2,6 +2,7 @@ package com.konkuk.kindmap.component
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -23,6 +24,7 @@ import com.konkuk.kindmap.ui.theme.kindMapColors
 @Composable
 fun MarkerChip(
     categoryChipType: CategoryChipType,
+    onClick: (CategoryChipType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -43,7 +45,10 @@ fun MarkerChip(
                         color = categoryChipType.markerColor ?: kindMapColors.white,
                         shape = RoundedCornerShape(14.dp),
                     )
-                    .padding(horizontal = 15.dp, vertical = 8.dp),
+                    .padding(horizontal = 15.dp, vertical = 8.dp)
+                    .clickable {
+                        onClick(categoryChipType)
+                    },
             contentAlignment = Alignment.Center,
         ) {
             Text(
@@ -79,6 +84,7 @@ private fun MarkerChipPrev() {
     KindMapTheme {
         MarkerChip(
             categoryChipType = CategoryChipType.OtherFood,
+            onClick = {},
         )
     }
 }
@@ -89,6 +95,7 @@ private fun MarkerChipPrev2() {
     KindMapTheme {
         MarkerChip(
             categoryChipType = CategoryChipType.Japanese,
+            onClick = {},
         )
     }
 }
@@ -99,6 +106,7 @@ private fun MarkerChipPrev3() {
     KindMapTheme {
         MarkerChip(
             categoryChipType = CategoryChipType.Korean,
+            onClick = {},
         )
     }
 }
