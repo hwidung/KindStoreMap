@@ -51,39 +51,6 @@ fun MainScreen(
 
     val context = LocalContext.current
 
-    if (bottomSheetVisibility && selectedMarker != null) {
-        DetailBottomSheet(
-            onDismissRequest = { bottomSheetVisibility = false },
-            dummyStoreDetail = selectedMarker!!,
-            onSharedClick = {
-                shareDialogVisibility = true
-            },
-        )
-    }
-
-    if (shareDialogVisibility) {
-        ShareCard(
-            dummyStoreDetail =
-                DummyStoreDetail(
-                    id = 1,
-                    category = CategoryChipType.Japanese,
-                    name = "명신 미용실",
-                    address = "서울특별시 광진구 자양로37길 8 (구의동)",
-                    phone = "453-2774",
-                    description = "가격이 저렴하다고 해서 실력이 모자라는 건 절대아닙니다\\r\\n20년전통과 기술로 만족을 드립니다.",
-                    imageUrl = null,
-                ),
-            onDismissRequest = { shareDialogVisibility = false },
-            onSharedClick = { bitmap ->
-                SharedPrepare.prepareShare(
-                    context = context,
-                    bitmap = bitmap,
-                    onFailure = { Toast.makeText(context, "공유 실패", Toast.LENGTH_SHORT).show() },
-                )
-            },
-        )
-    }
-
     Box(
         modifier =
             modifier
@@ -173,6 +140,39 @@ fun MainScreen(
         ReviewWebView(
             url = "https://goodprice.go.kr/cmnt/reviewList.do",
             onClose = { webViewVisible = false },
+        )
+    }
+
+    if (bottomSheetVisibility && selectedMarker != null) {
+        DetailBottomSheet(
+            onDismissRequest = { bottomSheetVisibility = false },
+            dummyStoreDetail = selectedMarker!!,
+            onSharedClick = {
+                shareDialogVisibility = true
+            },
+        )
+    }
+
+    if (shareDialogVisibility) {
+        ShareCard(
+            dummyStoreDetail =
+                DummyStoreDetail(
+                    id = 1,
+                    category = CategoryChipType.Japanese,
+                    name = "명신 미용실",
+                    address = "서울특별시 광진구 자양로37길 8 (구의동)",
+                    phone = "453-2774",
+                    description = "가격이 저렴하다고 해서 실력이 모자라는 건 절대아닙니다\\r\\n20년전통과 기술로 만족을 드립니다.",
+                    imageUrl = null,
+                ),
+            onDismissRequest = { shareDialogVisibility = false },
+            onSharedClick = { bitmap ->
+                SharedPrepare.prepareShare(
+                    context = context,
+                    bitmap = bitmap,
+                    onFailure = { Toast.makeText(context, "공유 실패", Toast.LENGTH_SHORT).show() },
+                )
+            },
         )
     }
 }
