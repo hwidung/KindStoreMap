@@ -1,8 +1,7 @@
-package com.konkuk.kindmap.screen
+package com.konkuk.kindmap.map
 
 import android.Manifest
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ModalBottomSheetDefaults.properties
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier

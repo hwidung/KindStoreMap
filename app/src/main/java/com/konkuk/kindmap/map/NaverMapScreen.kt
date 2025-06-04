@@ -1,4 +1,4 @@
-package com.konkuk.kindmap.screen
+package com.konkuk.kindmap.map
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable

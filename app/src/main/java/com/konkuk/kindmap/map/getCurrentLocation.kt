@@ -1,4 +1,4 @@
-package com.konkuk.kindmap.screen
+package com.konkuk.kindmap.map
 
 import android.Manifest
 import android.content.Context

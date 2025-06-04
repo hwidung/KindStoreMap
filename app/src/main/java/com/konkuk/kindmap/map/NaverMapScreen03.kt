@@ -1,4 +1,4 @@
-package com.konkuk.kindmap.screen
+package com.konkuk.kindmap.map
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearOutSlowInEasing
