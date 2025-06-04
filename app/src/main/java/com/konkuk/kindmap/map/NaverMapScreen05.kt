@@ -16,43 +16,45 @@ import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
 
-
-
 @OptIn(ExperimentalNaverMapApi::class, ExperimentalPermissionsApi::class)
 @Composable
 fun NaverMapScreen05(modifier: Modifier = Modifier) {
-    val permissionState = rememberMultiplePermissionsState(
-        permissions = listOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
+    val permissionState =
+        rememberMultiplePermissionsState(
+            permissions =
+                listOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                ),
         )
-    )
 
     LaunchedEffect(Unit) {
         permissionState.launchMultiplePermissionRequest()
     }
 
-    val granted = permissionState.permissions.any {it.status.isGranted}
+    val granted = permissionState.permissions.any { it.status.isGranted }
 
     val cameraPositionState = rememberCameraPositionState()
     val locationSource = rememberFusedLocationSource()
 
-    if(granted) {
+    if (granted) {
         NaverMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
             locationSource = locationSource,
-            properties = MapProperties(
-                locationTrackingMode = LocationTrackingMode.Face
-        ),
-            uiSettings = MapUiSettings(
-                isLocationButtonEnabled = true
-            )
+            properties =
+                MapProperties(
+                    locationTrackingMode = LocationTrackingMode.Face,
+                ),
+            uiSettings =
+                MapUiSettings(
+                    isLocationButtonEnabled = true,
+                ),
         )
-    }else{
+    } else {
         NaverMap(
             modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState
+            cameraPositionState = cameraPositionState,
         )
     }
 }

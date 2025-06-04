@@ -1,5 +1,4 @@
 import org.gradle.kotlin.dsl.implementation
-import com.google.android.libraries.mapsplatform.secrets_gradle_plugin.SecretsPluginExtension.Companion.defaultPropertiesFile
 
 plugins {
     alias(libs.plugins.android.application)

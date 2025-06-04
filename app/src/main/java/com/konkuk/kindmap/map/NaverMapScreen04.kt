@@ -20,29 +20,31 @@ import com.naver.maps.map.compose.rememberCameraPositionState
 @Composable
 fun NaverMapScreen04(modifier: Modifier = Modifier) {
     val konkuk = LatLng(37.5408, 127.0793)
-    val cameraPositionState = rememberCameraPositionState{
-        position = CameraPosition(konkuk, 15.0)
-    }
-    val makerPosition = remember{ mutableStateListOf<LatLng>() }
+    val cameraPositionState =
+        rememberCameraPositionState {
+            position = CameraPosition(konkuk, 15.0)
+        }
+    val makerPosition = remember { mutableStateListOf<LatLng>() }
 
     NaverMap(
-        modifier= modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState,
-        onMapClick = {_, latlng -> makerPosition.add(latlng)
-        }
+        onMapClick = { _, latlng ->
+            makerPosition.add(latlng)
+        },
     ) {
         makerPosition.forEach { position ->
             Marker(
-                state = MarkerState(position = position)
+                state = MarkerState(position = position),
             )
         }
 
-        if(makerPosition.size >=3){
+        if (makerPosition.size >= 3) {
             PolygonOverlay(
                 coords = makerPosition.toList(),
-                color = Color(red=0x00, green = 0xFF, blue = 0x00, alpha = 0x55),
+                color = Color(red = 0x00, green = 0xFF, blue = 0x00, alpha = 0x55),
                 outlineColor = Color.Blue,
-                outlineWidth = 7.dp
+                outlineWidth = 7.dp,
             )
         }
 //        if(makerPosition.size >=2){
@@ -54,4 +56,3 @@ fun NaverMapScreen04(modifier: Modifier = Modifier) {
 //        }
     }
 }
-
