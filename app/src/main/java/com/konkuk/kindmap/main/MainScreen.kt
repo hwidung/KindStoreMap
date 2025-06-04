@@ -1,7 +1,7 @@
 package com.konkuk.kindmap.main
 
+import android.R.attr.onClick
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,11 +22,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.konkuk.kindmap.R
 import com.konkuk.kindmap.component.CategoryChip
 import com.konkuk.kindmap.component.DetailBottomSheet
 import com.konkuk.kindmap.component.MarkerChip
@@ -34,6 +31,7 @@ import com.konkuk.kindmap.component.ReviewWebView
 import com.konkuk.kindmap.component.SearchLottieChip
 import com.konkuk.kindmap.component.ShareCard
 import com.konkuk.kindmap.component.type.CategoryChipType
+import com.konkuk.kindmap.map.NaverMapScreen
 import com.konkuk.kindmap.model.DummyStoreDetail
 import com.konkuk.kindmap.ui.theme.KindMapTheme
 import com.konkuk.kindmap.ui.util.SharedPrepare
@@ -59,12 +57,7 @@ fun MainScreen(
                 .background(color = KindMapTheme.colors.white),
     ) {
         // Todo : Image을 지우고, Naver Map 뷰를 구현해주세요.
-        Image(
-            painter = painterResource(id = R.drawable.dummy_map_img),
-            contentDescription = null,
-            contentScale = ContentScale.FillBounds,
-            modifier = Modifier.fillMaxSize(),
-        )
+        NaverMapScreen()
 
         Row(
             modifier =
@@ -126,13 +119,17 @@ fun MainScreen(
             }
         }
 
-        // Todo : 웹뷰 테스트입니다. 삭제 예정입니다.
+        // Todo : 웹뷰 테스트입니다. 수정 예정입니다.
         Button(
+            modifier =
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 23.dp),
             onClick = {
                 webViewVisible = true
             },
         ) {
-            Text("웹뷰-리뷰 작성하기")
+            Text("웹뷰테스트")
         }
     }
 
