@@ -1,15 +1,10 @@
-import org.gradle.kotlin.dsl.implementation
+import com.google.android.libraries.mapsplatform.secrets_gradle_plugin.SecretsPluginExtension.Companion.defaultPropertiesFile
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-
-    // kapt
-    id("org.jetbrains.kotlin.kapt")
-
-    // ktlint
-    id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
+    alias(libs.plugins.secrets.gradle.plugin)
 }
 
 android {
@@ -31,7 +26,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
+                "proguard-rules.pro"
             )
         }
     }
@@ -57,6 +52,10 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation("com.naver.maps:map-sdk:3.21.0")
+    implementation(libs.naver.map.compose)
+    implementation(libs.accompanist.permissions)
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -66,13 +65,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // Navigation
-    implementation(libs.androidx.navigation.compose)
+    //implementation(libs.androidx.navigation.compose)
 }
 
-ktlint {
-    android = true
-    debug = true
-    coloredOutput = true
-    verbose = true
-    outputToConsole = true
+secrets {
+    propertiesFileName = "secrets.properties"
+    defaultPropertiesFileName = "local.defaults.properties"
 }
+
