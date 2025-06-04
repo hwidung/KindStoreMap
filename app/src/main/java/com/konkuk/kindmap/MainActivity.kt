@@ -14,6 +14,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -21,6 +23,10 @@ import com.konkuk.kindmap.main.MainScreen
 import com.konkuk.kindmap.splash.SplashScreen
 import com.konkuk.kindmap.ui.theme.KindMapTheme
 import kotlinx.coroutines.delay
+import androidx.compose.ui.tooling.preview.Preview
+import com.konkuk.kindmap.map.NaverMapScreen
+import com.konkuk.kindmap.ui.theme.MyApplicationTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

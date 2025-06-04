@@ -1,9 +1,11 @@
 import org.gradle.kotlin.dsl.implementation
+import com.google.android.libraries.mapsplatform.secrets_gradle_plugin.SecretsPluginExtension.Companion.defaultPropertiesFile
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.secrets.gradle.plugin)
 
     // kapt
     id("org.jetbrains.kotlin.kapt")
@@ -57,6 +59,10 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation("com.naver.maps:map-sdk:3.21.0")
+    implementation(libs.naver.map.compose)
+    implementation(libs.accompanist.permissions)
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -84,4 +90,9 @@ ktlint {
     coloredOutput = true
     verbose = true
     outputToConsole = true
+}
+
+secrets {
+    propertiesFileName = "secrets.properties"
+    defaultPropertiesFileName = "local.defaults.properties"
 }

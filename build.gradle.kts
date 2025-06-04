@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose) apply false
+    alias(libs.plugins.secrets.gradle.plugin) apply false
 
     // ktlint
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
