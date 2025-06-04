@@ -30,17 +30,18 @@ import kotlinx.coroutines.launch
 @Composable
 fun NaverMapMarker01(modifier: Modifier = Modifier) {
     val konkuk = LatLng(37.5408, 127.0793)
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(konkuk, 15.0)
-    }
+    val cameraPositionState =
+        rememberCameraPositionState {
+            position = CameraPosition(konkuk, 15.0)
+        }
     NaverMap(
         modifier = modifier.fillMaxSize(),
-        cameraPositionState = cameraPositionState
+        cameraPositionState = cameraPositionState,
     ) {
         Marker(
             state = rememberMarkerState(position = konkuk),
             icon = MarkerIcons.RED,
-            captionText = "건국대학교"
+            captionText = "건국대학교",
         )
     }
 }
@@ -49,37 +50,39 @@ fun NaverMapMarker01(modifier: Modifier = Modifier) {
 @Composable
 fun NaverMapMarker02(modifier: Modifier = Modifier) {
     val konkuk = LatLng(37.5408, 127.0793)
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(konkuk, 15.0)
-    }
+    val cameraPositionState =
+        rememberCameraPositionState {
+            position = CameraPosition(konkuk, 15.0)
+        }
 
     NaverMap(
         modifier = modifier.fillMaxSize(),
-        cameraPositionState = cameraPositionState
+        cameraPositionState = cameraPositionState,
     ) {
         Marker(
             state = rememberMarkerState(position = konkuk),
             icon = MarkerIcons.BLACK,
-            //iconTintColor = Color.Magenta,
-            //iconTintColor = Color(0x88458E6F),
+            // iconTintColor = Color.Magenta,
+            // iconTintColor = Color(0x88458E6F),
             iconTintColor = Color(red = 0.5f, green = 0.2f, blue = 0.8f, alpha = 1.0f),
-            captionText = "건국대학교"
+            captionText = "건국대학교",
         )
     }
 }
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
-fun NaverMapMarker03(modifier: Modifier = Modifier) { //클릭 이벤트
+fun NaverMapMarker03(modifier: Modifier = Modifier) { // 클릭 이벤트
     val konkuk = LatLng(37.5408, 127.0793)
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(konkuk, 15.0)
-    }
+    val cameraPositionState =
+        rememberCameraPositionState {
+            position = CameraPosition(konkuk, 15.0)
+        }
     var isClicked by remember { mutableStateOf(false) }
 
     NaverMap(
         modifier = modifier.fillMaxSize(),
-        cameraPositionState = cameraPositionState
+        cameraPositionState = cameraPositionState,
     ) {
         Marker(
             state = rememberMarkerState(position = konkuk),
@@ -88,7 +91,7 @@ fun NaverMapMarker03(modifier: Modifier = Modifier) { //클릭 이벤트
             onClick = {
                 isClicked = !isClicked
                 true
-            }
+            },
         )
     }
 }
@@ -97,20 +100,21 @@ fun NaverMapMarker03(modifier: Modifier = Modifier) { //클릭 이벤트
 @Composable
 fun NaverMapMarker04(modifier: Modifier = Modifier) {
     val konkuk = LatLng(37.5408, 127.0793)
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(konkuk, 15.0)
-    }
+    val cameraPositionState =
+        rememberCameraPositionState {
+            position = CameraPosition(konkuk, 15.0)
+        }
 
     NaverMap(
         modifier = modifier.fillMaxSize(),
-        cameraPositionState = cameraPositionState
+        cameraPositionState = cameraPositionState,
     ) {
         Marker(
             state = rememberMarkerState(position = konkuk),
-            //icon = OverlayImage.fromResource(R.drawable.konkuk),
+            // icon = OverlayImage.fromResource(R.drawable.konkuk),
             width = 40.dp,
             height = 40.dp,
-            captionText = "건국대학교"
+            captionText = "건국대학교",
         )
     }
 }
@@ -119,9 +123,10 @@ fun NaverMapMarker04(modifier: Modifier = Modifier) {
 @Composable
 fun NaverMapMarker05() {
     val konkuk = LatLng(37.5408, 127.0793)
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(konkuk, 15.0)
-    }
+    val cameraPositionState =
+        rememberCameraPositionState {
+            position = CameraPosition(konkuk, 15.0)
+        }
 
     val bounceOffset = remember { Animatable(0f) }
     val scope = rememberCoroutineScope()
@@ -134,17 +139,15 @@ fun NaverMapMarker05() {
                 scope.launch {
                     bounceOffset.animateTo(
                         targetValue = -30f,
-                        animationSpec = tween(durationMillis = 200, easing = LinearOutSlowInEasing)
+                        animationSpec = tween(durationMillis = 200, easing = LinearOutSlowInEasing),
                     )
                     bounceOffset.animateTo(
                         targetValue = 0f,
-                        animationSpec = spring()
+                        animationSpec = spring(),
                     )
                 }
                 true
-            }
+            },
         )
     }
 }
-
-

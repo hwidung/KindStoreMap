@@ -55,13 +55,13 @@ fun RouteSelectionScreen() {
                     "start" -> if (!useCurrentLocation) startLocation = latLng
                     "goal" -> goalLocation = latLng
                 }
-            }
+            },
         ) {
             // 출발지 마커
             startLocation?.let {
                 Marker(
                     state = MarkerState(position = it),
-                    captionText = "출발지"
+                    captionText = "출발지",
                 )
             }
 
@@ -69,7 +69,7 @@ fun RouteSelectionScreen() {
             if (useCurrentLocation && currentLocation != null) {
                 Marker(
                     state = MarkerState(position = currentLocation!!),
-                    captionText = "내 위치"
+                    captionText = "내 위치",
                 )
             }
 
@@ -77,11 +77,10 @@ fun RouteSelectionScreen() {
             goalLocation?.let {
                 Marker(
                     state = MarkerState(position = it),
-                    captionText = "도착지"
+                    captionText = "도착지",
                 )
             }
         }
-
     }
 
     // 출발지 / 도착지 버튼
@@ -117,7 +116,6 @@ fun RouteSelectionScreen() {
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

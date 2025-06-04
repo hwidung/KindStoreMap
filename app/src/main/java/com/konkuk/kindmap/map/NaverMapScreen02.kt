@@ -23,7 +23,6 @@ import com.naver.maps.map.compose.NaverMap
 @OptIn(ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun NaverMapScreen02(modifier: Modifier = Modifier) {
-
     var mapType by remember {
         mutableStateOf(MapType.Basic)
     }
@@ -35,8 +34,8 @@ fun NaverMapScreen02(modifier: Modifier = Modifier) {
                 isZoomControlEnabled = false,
                 isCompassEnabled = true,
                 isRotateGesturesEnabled = true,
-                logoGravity = Gravity.TOP or Gravity.END
-            )
+                logoGravity = Gravity.TOP or Gravity.END,
+            ),
         )
     }
 
@@ -66,14 +65,14 @@ fun NaverMapScreen02(modifier: Modifier = Modifier) {
                     }) {
                         Text("4")
                     }
-                }
+                },
             )
-        }
+        },
     ) {
         NaverMap(
             modifier = Modifier.padding(it),
             properties = MapProperties(mapType = mapType),
-            uiSettings = mapUiSettings
+            uiSettings = mapUiSettings,
         )
     }
 }

@@ -1,10 +1,16 @@
-import com.google.android.libraries.mapsplatform.secrets_gradle_plugin.SecretsPluginExtension.Companion.defaultPropertiesFile
+import org.gradle.kotlin.dsl.implementation
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.secrets.gradle.plugin)
+
+    // kapt
+    id("org.jetbrains.kotlin.kapt")
+
+    // ktlint
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
 }
 
 android {
@@ -13,7 +19,7 @@ android {
 
     defaultConfig {
         applicationId = "com.konkuk.kindmap"
-        minSdk = 34
+        minSdk = 29
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -26,7 +32,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -65,11 +71,27 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // Navigation
-    //implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
+
+    // Lottie
+    implementation(libs.lottie.compose)
+
+    // Coil
+    implementation(libs.coil.compose)
+
+    // WebView
+    implementation(libs.google.accompanist.webview)
+}
+
+ktlint {
+    android = true
+    debug = true
+    coloredOutput = true
+    verbose = true
+    outputToConsole = true
 }
 
 secrets {
     propertiesFileName = "secrets.properties"
     defaultPropertiesFileName = "local.defaults.properties"
 }
-

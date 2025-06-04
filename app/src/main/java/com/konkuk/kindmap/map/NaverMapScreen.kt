@@ -15,18 +15,18 @@ import com.naver.maps.map.compose.rememberMarkerState
 @Composable
 fun NaverMapScreen(modifier: Modifier = Modifier) {
     val konkuk = LatLng(37.5408, 127.0793)
-    val cameraPositionState = rememberCameraPositionState{
-        position = CameraPosition(konkuk, 15.0)
-    }
+    val cameraPositionState =
+        rememberCameraPositionState {
+            position = CameraPosition(konkuk, 15.0)
+        }
 
     NaverMap(
-        modifier= modifier.fillMaxSize(),
-        cameraPositionState = cameraPositionState
-    ){
+        modifier = modifier.fillMaxSize(),
+        cameraPositionState = cameraPositionState,
+    ) {
         Marker(
             state = rememberMarkerState(position = konkuk),
-            captionText = "건국대학교"
+            captionText = "건국대학교",
         )
     }
 }
-
