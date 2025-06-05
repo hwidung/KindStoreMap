@@ -46,6 +46,7 @@ fun MainScreen(
     var selectedCategory by remember { mutableStateOf(CategoryChipType.All) }
     var selectedMarker by remember { mutableStateOf<DummyStoreDetail?>(null) }
     var webViewVisible by remember { mutableStateOf(false) }
+    var selectedStar by remember { mutableStateOf(1) }
 
     val context = LocalContext.current
 
@@ -147,6 +148,8 @@ fun MainScreen(
             onSharedClick = {
                 shareDialogVisibility = true
             },
+            selectedStar = selectedStar,
+            onStarChanged = { selectedStar = it },
         )
     }
 
