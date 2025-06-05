@@ -6,4 +6,5 @@ plugins {
 
     // ktlint
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
+    alias(libs.plugins.google.gms.google.services) apply false
 }
