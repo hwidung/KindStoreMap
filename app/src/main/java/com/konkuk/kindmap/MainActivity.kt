@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
             storeViewModel.storeList.collect { stores ->
                 Log.d("FirebaseTest", "Fetched ${stores.size} stores")
                 for (store in stores) {
-                    Log.d("FirebaseTest", "ID: ${store.sh_id}, Store: ${store.sh_name}, Address: ${store.sh_addr}, Phone: ${store.sh_phone}")
+                    Log.d("FirebaseTest", "ID: ${store.sh_id}, Store: ${store.sh_name}, Address: ${store.sh_addr}, GeoHash: ${store.geohash}")
                 }
             }
         }
