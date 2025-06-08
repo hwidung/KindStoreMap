@@ -1,3 +1,4 @@
+import android.system.Os.close
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryEventListener
@@ -15,6 +16,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class StoreRepository(private val table: DatabaseReference) {
+
+    val geoFireRef = FirebaseDatabase.getInstance().reference.child("geofire-locations")
+    val geoFire = GeoFire(geoFireRef)
 
     fun findAll(): Flow<List<StoreEntity>> = callbackFlow {
         try {
@@ -83,9 +87,6 @@ class StoreRepository(private val table: DatabaseReference) {
         longitude: Double,
         radiusKm: Double
     ): Flow<List<StoreEntity>> = callbackFlow {
-        val geoFireRef = FirebaseDatabase.getInstance().reference.child("geofire-locations")
-        val geoFire = GeoFire(geoFireRef)
-
         val center = GeoLocation(latitude, longitude)
         val query = geoFire.queryAtLocation(center, radiusKm)
 
@@ -104,6 +105,51 @@ class StoreRepository(private val table: DatabaseReference) {
                     val stores = Ids.map { id ->
                         findById(id).firstOrNull()
                     }.filterNotNull()
+
+                    trySend(stores).isSuccess
+                    close()
+                }
+            }
+
+            override fun onGeoQueryError(error: DatabaseError) {
+                close(error.toException())
+            }
+
+            override fun onKeyExited(key: String) {}
+            override fun onKeyMoved(key: String, location: GeoLocation) {}
+        }
+
+        query.addGeoQueryEventListener(listener)
+
+        awaitClose { query.removeAllListeners() }
+    }
+
+    // 분류 코드 해당되는 근처 가게 조회
+    fun findNearbyStoresByIndutyCode(
+        latitude: Double,
+        longitude: Double,
+        radiusKm: Double,
+        indutyCode: Long
+    ): Flow<List<StoreEntity>> = callbackFlow {
+        val center = GeoLocation(latitude, longitude)
+        val query = geoFire.queryAtLocation(center, radiusKm)
+
+        val matchedIds = mutableListOf<Long>()
+
+        val listener = object : GeoQueryEventListener {
+            override fun onKeyEntered(key: String, location: GeoLocation) {
+                val id = key.removePrefix("store_").toLongOrNull()
+                if (id != null) {
+                    matchedIds.add(id)
+                }
+            }
+
+            override fun onGeoQueryReady() {
+                launch {
+                    val stores = matchedIds.mapNotNull { id ->
+                        val store = findById(id).firstOrNull()
+                        if (store?.induty_code_se == indutyCode) store else null
+                    }
 
                     trySend(stores).isSuccess
                     close()

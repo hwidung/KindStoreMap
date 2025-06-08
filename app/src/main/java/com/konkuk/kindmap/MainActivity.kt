@@ -61,6 +61,22 @@ class MainActivity : ComponentActivity() {
                         }
                     }
             }
+            // 분류 코드 해당되는 근처 가게 조회
+            val latitude = 37.56
+            val longitude = 127.04
+            val radiusKm = 0.5
+            val indutyCode = 5L
+
+            storeRepository.findNearbyStoresByIndutyCode(latitude, longitude, radiusKm, indutyCode)
+                .collect { stores ->
+                    Log.d("FirebaseTest findNearbyStoresByIndutyCode", "Fetched ${stores.size} stores nearby with induty $indutyCode")
+                    stores.forEach { store ->
+                        Log.d(
+                            "FirebaseTest findNearbyStoresByIndutyCode",
+                            "ID: ${store.sh_id}, Name: ${store.sh_name}, Code: ${store.induty_code_se}, Lat: ${store.latitude}, Lng: ${store.longitude}"
+                        )
+                    }
+                }
         }
         // ### ###
 
