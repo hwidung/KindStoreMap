@@ -28,6 +28,14 @@ class MainActivity : ComponentActivity() {
 
         // DB 테스트
         lifecycleScope.launch {
+            // Id로 조회 테스트
+            storeRepository.findById(10000L).collectLatest { store ->
+                if (store != null) {
+                    Log.d("Firebase findById", "ID: ${store.sh_id}, Name: ${store.sh_name}, Addr: ${store.sh_addr}, GeoHash: ${store.geohash}, latitude: ${store.latitude}, longitude: ${store.longitude}")
+                } else {
+                    Log.d("Firebase findById", "해당 ID의 가게를 찾을 수 없습니다.")
+                }
+            }
             // 전체 조회 테스트
             storeRepository.findAll().collectLatest { stores ->
                 Log.d("Firebase findAll", "Fetched ${stores.size} stores")
@@ -35,12 +43,15 @@ class MainActivity : ComponentActivity() {
                     Log.d("Firebase findAll", "ID: ${store.sh_id}, Name: ${store.sh_name}, Addr: ${store.sh_addr}, GeoHash: ${store.geohash}")
                 }
             }
-            // Id로 조회 테스트
-            storeRepository.findById(10000L).collectLatest { store ->
-                if (store != null) {
-                    Log.d("Firebase findById", "ID: ${store.sh_id}, Name: ${store.sh_name}, Addr: ${store.sh_addr}, GeoHash: ${store.geohash}, latitude: ${store.latitude}, longitude: ${store.longitude}")
-                } else {
-                    Log.d("Firebase findById", "해당 ID의 가게를 찾을 수 없습니다.")
+            //랭킹 테스트
+            val limit = 30 // 원하는 갯수 지정
+            storeRepository.findTopByRecommendation(limit).collectLatest { stores ->
+                Log.d("FirebaseTest findTopByRecommendation", "Top $limit Stores by Recommendation")
+                stores.forEachIndexed { index, store ->
+                    Log.d(
+                        "FirebaseTest findTopByRecommendation",
+                        "${index + 1}. ID: ${store.sh_id}, Name: ${store.sh_name}, sh_rcmn: ${store.sh_rcmn}"
+                    )
                 }
             }
             // 업종 코드로 조회 테스트

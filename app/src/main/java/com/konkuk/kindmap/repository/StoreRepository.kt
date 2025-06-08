@@ -19,21 +19,6 @@ class StoreRepository(private val table: DatabaseReference) {
     val geoFireRef = FirebaseDatabase.getInstance().reference.child("geofire-locations")
     val geoFire = GeoFire(geoFireRef)
 
-    fun findAll(): Flow<List<StoreEntity>> = callbackFlow {
-        try {
-            val snapshot = table.get().await()
-            val stores = snapshot.children.mapNotNull {
-                it.getValue(StoreEntity::class.java)
-            }
-            trySend(stores).isSuccess
-            close()
-        } catch (e: Exception) {
-            close(e)
-        }
-
-        awaitClose { }
-    }
-
     fun findById(shId: Long): Flow<StoreEntity?> = callbackFlow {
         val query = table.orderByChild("sh_id").equalTo(shId.toDouble())
 
@@ -57,6 +42,43 @@ class StoreRepository(private val table: DatabaseReference) {
         awaitClose {
             query.removeEventListener(listener)
         }
+    }
+
+    fun findAll(): Flow<List<StoreEntity>> = callbackFlow {
+        try {
+            val snapshot = table.get().await()
+            val stores = snapshot.children.mapNotNull {
+                it.getValue(StoreEntity::class.java)
+            }
+            trySend(stores).isSuccess
+            close()
+        } catch (e: Exception) {
+            close(e)
+        }
+
+        awaitClose { }
+    }
+
+    // 추천수 상위 내림차순으로 조회
+    fun findTopByRecommendation(limit: Int): Flow<List<StoreEntity>> = callbackFlow {
+        try {
+            val snapshot = table
+                .orderByChild("sh_rcmn") //DB상에서 sh_rcmn을 기준으로 정렬돼 있음
+                .limitToLast(limit)
+                .get()
+                .await()
+
+            val stores = snapshot.children
+                .mapNotNull { it.getValue(StoreEntity::class.java) }
+                .sortedByDescending { it.sh_rcmn } // 역정렬
+
+            trySend(stores).isSuccess
+            close()
+        } catch (e: Exception) {
+            close(e)
+        }
+
+        awaitClose { }
     }
 
     // 분류 코드로 조회
