@@ -1,11 +1,17 @@
+import android.util.Log
+import com.firebase.geofire.GeoFire
+import com.firebase.geofire.GeoLocation
+import com.firebase.geofire.GeoQueryEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.konkuk.kindmap.model.StoreEntity
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class StoreRepository(private val table: DatabaseReference) {
@@ -49,4 +55,47 @@ class StoreRepository(private val table: DatabaseReference) {
             query.removeEventListener(listener)
         }
     }
+
+    // (위도, 경도, 반경 km)를 인자로 반경 내 가게들 조회
+    fun findNearbyStores(
+        latitude: Double,
+        longitude: Double,
+        radiusKm: Double
+    ): Flow<StoreEntity> = callbackFlow {
+        val geoFireRef = FirebaseDatabase.getInstance().reference.child("geofire-locations")
+        val geoFire = GeoFire(geoFireRef)
+
+        val center = GeoLocation(latitude, longitude)
+        val query = geoFire.queryAtLocation(center, radiusKm)
+
+        val listener = object : GeoQueryEventListener {
+            override fun onKeyEntered(key: String, location: GeoLocation) {
+                val storeId = key.removePrefix("store_").toLongOrNull()
+                if (storeId != null) {
+                    launch {
+                        findById(storeId).collect { store ->
+                            store?.let { trySend(it).isSuccess }
+                        }
+                    }
+                }
+            }
+
+            override fun onKeyExited(key: String) {}
+            override fun onKeyMoved(key: String, location: GeoLocation) {}
+            override fun onGeoQueryReady() {} // 모든 초기 결과가 처리되었음을 알림 (필요시 나중에 추가)
+
+            override fun onGeoQueryError(error: DatabaseError) {
+                close(error.toException())
+            }
+        }
+
+        query.addGeoQueryEventListener(listener)
+
+        awaitClose {
+            query.removeAllListeners()
+        }
+    }
+
+    // 500m반경 내 가게 조회
+    fun findNearbyStores500m(latitude: Double, longitude: Double): Flow<StoreEntity> = findNearbyStores(latitude, longitude, 0.5)
 }

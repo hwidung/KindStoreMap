@@ -7,8 +7,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
-import com.firebase.geofire.GeoFire
-import com.firebase.geofire.GeoLocation
 import com.google.firebase.database.FirebaseDatabase
 import com.konkuk.kindmap.ui.theme.MyApplicationTheme
 import kotlinx.coroutines.flow.collectLatest
@@ -45,39 +43,16 @@ class MainActivity : ComponentActivity() {
                     Log.d("FirebaseTest findById", "해당 ID의 가게를 찾을 수 없습니다.")
                 }
             }
+            // 근처 가게 조회 (반경 지정)
+            storeRepository.findNearbyStores(37.56, 127.04, 0.5) // 500m
+                .collect { store ->
+                    Log.d("FirebaseTest findNearbyStores", "Found: ${store.sh_name} at ${store.latitude}, ${store.longitude}")
+                }
         }
         // ### ###
 
-        //firebase db geofire table 초기화
-        // DB업데이트 후 최초 1회만 실행됨
-        initGeoFire(storeRepository)
-
         setContent {
             MyApplicationTheme {
-            }
-        }
-    }
-
-    private fun initGeoFire(storeRepository: StoreRepository) {
-        val prefs = getSharedPreferences("init", MODE_PRIVATE)
-        val alreadyInitialized = prefs.getBoolean("isGeoFireInitialized", false)
-
-        if (!alreadyInitialized) {
-            lifecycleScope.launch {
-                storeRepository.findAll().collect { storeList ->
-                    val geoFire = GeoFire(FirebaseDatabase.getInstance().getReference("geofire-locations"))
-                    storeList.forEach { store ->
-                        geoFire.setLocation("store_${store.sh_id}", GeoLocation(store.latitude, store.longitude)) { key, error ->
-                            if (error != null) {
-                                Log.e("GeoFire", "등록 실패: $key")
-                            } else {
-                                Log.d("GeoFire", "등록 성공: $key")
-                            }
-                        }
-                    }
-                    // 등록 완료 후 플래그 true로 저장
-                    prefs.edit().putBoolean("isGeoFireInitialized", true).apply()
-                }
             }
         }
     }
