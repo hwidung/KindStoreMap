@@ -61,16 +61,6 @@ class MainActivity : ComponentActivity() {
                         }
                     }
             }
-            // 근처 가게 조회 (500m)
-            lifecycleScope.launch {
-                storeRepository.findNearbyStores500m(37.56, 127.04)
-                    .collectLatest { stores ->
-                        Log.d("Firebase findNearbyStores500m", "Fetched ${stores.size} stores nearby")
-                        stores.forEach {
-                            Log.d("Firebase findNearbyStores500m", "Found: ${it.sh_name} (${it.latitude}, ${it.longitude})")
-                        }
-                    }
-            }
         }
         // ### ###
 

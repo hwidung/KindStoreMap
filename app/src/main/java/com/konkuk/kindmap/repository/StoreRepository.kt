@@ -122,8 +122,4 @@ class StoreRepository(private val table: DatabaseReference) {
 
         awaitClose { query.removeAllListeners() }
     }
-
-    // 500m반경 내 가게 조회
-    fun findNearbyStores500m(latitude: Double, longitude: Double): Flow<List<StoreEntity>> =
-        findNearbyStores(latitude, longitude, 0.5)
 }
