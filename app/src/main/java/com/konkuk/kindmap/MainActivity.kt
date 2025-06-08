@@ -30,7 +30,8 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
 
-        testFirebase()
+        //firebase 테스트용 함수입니다. 필요시 주석 풀고 사용하세요.
+//        testFirebase()
 
         setContent {
             var showSplash by remember { mutableStateOf(true) }
@@ -122,4 +123,5 @@ class MainActivity : ComponentActivity() {
                     }
                 }
         }
+    }
 }
