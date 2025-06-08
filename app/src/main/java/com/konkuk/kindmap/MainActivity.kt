@@ -65,9 +65,9 @@ class MainActivity : ComponentActivity() {
             lifecycleScope.launch {
                 storeRepository.findNearbyStores500m(37.56, 127.04)
                     .collectLatest { stores ->
-                        Log.d("Firebase findNearbyStores", "Fetched ${stores.size} stores nearby")
+                        Log.d("Firebase findNearbyStores500m", "Fetched ${stores.size} stores nearby")
                         stores.forEach {
-                            Log.d("Firebase findNearbyStores", "Found: ${it.sh_name} (${it.latitude}, ${it.longitude})")
+                            Log.d("Firebase findNearbyStores500m", "Found: ${it.sh_name} (${it.latitude}, ${it.longitude})")
                         }
                     }
             }
