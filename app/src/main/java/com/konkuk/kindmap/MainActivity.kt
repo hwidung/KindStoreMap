@@ -18,10 +18,19 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        /**
-         * ### DB 호출시 참고하세요 ###
-         * (최종 코드에서 삭제 예정)
-         */
+        testFirebase()
+
+        setContent {
+            MyApplicationTheme {
+            }
+        }
+    }
+
+    /**
+     * ### DB 호출시 참고하세요 ###
+     * (최종 코드에서 삭제 예정)
+     */
+    private fun testFirebase() {
         // Firebase "STORE" 참조 가져오기
         val databaseRef = FirebaseDatabase.getInstance().reference.child("STORE")
         val storeRepository = StoreRepository(databaseRef)
@@ -88,12 +97,6 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 }
-        }
-        // ### ###
-
-        setContent {
-            MyApplicationTheme {
-            }
         }
     }
 }
