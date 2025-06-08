@@ -56,6 +56,27 @@ class StoreRepository(private val table: DatabaseReference) {
         }
     }
 
+    // 분류 코드로 조회
+    fun findByIndutyCode(indutyCode: Long): Flow<List<StoreEntity>> = callbackFlow {
+        val listener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val filteredStores = snapshot.children.mapNotNull { child ->
+                    val store = child.getValue(StoreEntity::class.java)
+                    if (store?.induty_code_se == indutyCode) store else null
+                }
+                trySend(filteredStores).isSuccess
+                close()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                close(error.toException())
+            }
+        }
+
+        table.addListenerForSingleValueEvent(listener)
+        awaitClose { table.removeEventListener(listener) }
+    }
+
     // (위도, 경도, 반경 km)를 인자로 반경 내 가게들 조회
     fun findNearbyStores(
         latitude: Double,
