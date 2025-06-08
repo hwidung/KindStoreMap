@@ -1,4 +1,3 @@
-import android.system.Os.close
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryEventListener
@@ -82,7 +81,7 @@ class StoreRepository(private val table: DatabaseReference) {
     }
 
     // (위도, 경도, 반경 km)를 인자로 반경 내 가게들 조회
-    fun findNearbyStores(
+    fun findNearby(
         latitude: Double,
         longitude: Double,
         radiusKm: Double
@@ -125,11 +124,11 @@ class StoreRepository(private val table: DatabaseReference) {
     }
 
     // 분류 코드 해당되는 근처 가게 조회
-    fun findNearbyStoresByIndutyCode(
+    fun findByIndutyCodeAndNearby(
+        indutyCode: Long,
         latitude: Double,
         longitude: Double,
-        radiusKm: Double,
-        indutyCode: Long
+        radiusKm: Double
     ): Flow<List<StoreEntity>> = callbackFlow {
         val center = GeoLocation(latitude, longitude)
         val query = geoFire.queryAtLocation(center, radiusKm)

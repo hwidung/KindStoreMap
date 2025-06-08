@@ -53,11 +53,11 @@ class MainActivity : ComponentActivity() {
                 }
             // 근처 가게 조회 (반경 지정)
             lifecycleScope.launch {
-                storeRepository.findNearbyStores(37.56, 127.04, 0.8)
+                storeRepository.findNearby(37.56, 127.04, 0.8)
                     .collectLatest { stores ->
-                        Log.d("Firebase findNearbyStores", "Fetched ${stores.size} stores nearby")
+                        Log.d("Firebase findNearby", "Fetched ${stores.size} stores nearby")
                         stores.forEach {
-                            Log.d("Firebase findNearbyStores", "Found: ${it.sh_name} (${it.latitude}, ${it.longitude})")
+                            Log.d("Firebase findNearby", "Found: ${it.sh_name} (${it.latitude}, ${it.longitude})")
                         }
                     }
             }
@@ -67,12 +67,12 @@ class MainActivity : ComponentActivity() {
             val radiusKm = 0.5
             val indutyCode = 5L
 
-            storeRepository.findNearbyStoresByIndutyCode(latitude, longitude, radiusKm, indutyCode)
+            storeRepository.findByIndutyCodeAndNearby(indutyCode, latitude, longitude, radiusKm)
                 .collect { stores ->
-                    Log.d("FirebaseTest findNearbyStoresByIndutyCode", "Fetched ${stores.size} stores nearby with induty $indutyCode")
+                    Log.d("FirebaseTest findByIndutyCodeAndNearby", "Fetched ${stores.size} stores nearby with induty $indutyCode")
                     stores.forEach { store ->
                         Log.d(
-                            "FirebaseTest findNearbyStoresByIndutyCode",
+                            "FirebaseTest findByIndutyCodeAndNearby",
                             "ID: ${store.sh_id}, Name: ${store.sh_name}, Code: ${store.induty_code_se}, Lat: ${store.latitude}, Lng: ${store.longitude}"
                         )
                     }
