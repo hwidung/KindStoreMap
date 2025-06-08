@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "761649101020",
+    "project_id": "kindstoremap",
+    "storage_bucket": "kindstoremap.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761649101020:android:4ad53994e3541a51cb1c19",
+        "android_client_info": {
+          "package_name": "com.konkuk.kindmap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgZd2qjEhhYHNaoyI3HmlJ0IRiYQACZ2s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
