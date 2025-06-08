@@ -8,20 +8,44 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.database.FirebaseDatabase
-import com.konkuk.kindmap.ui.theme.MyApplicationTheme
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import com.konkuk.kindmap.main.MainScreen
+import com.konkuk.kindmap.splash.SplashScreen
+import com.konkuk.kindmap.ui.theme.KindMapTheme
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
 
         testFirebase()
 
         setContent {
-            MyApplicationTheme {
+            var showSplash by remember { mutableStateOf(true) }
+            KindMapTheme {
+                LaunchedEffect(Unit) {
+                    delay(2000)
+                    showSplash = false
+                }
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    if (showSplash) {
+                        SplashScreen(innerPaddingValues = innerPadding)
+                    } else {
+                        MainScreen(innerPaddingValues = innerPadding)
+                    }
+                }
             }
         }
     }
@@ -98,5 +122,4 @@ class MainActivity : ComponentActivity() {
                     }
                 }
         }
-    }
 }

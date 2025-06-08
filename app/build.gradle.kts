@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.secrets.gradle.plugin)
 
     // kapt
     id("org.jetbrains.kotlin.kapt")
@@ -19,7 +20,7 @@ android {
 
     defaultConfig {
         applicationId = "com.konkuk.kindmap"
-        minSdk = 34
+        minSdk = 29
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -60,6 +61,10 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.firebase.database)
     implementation(libs.geofire.android)
+    implementation("com.naver.maps:map-sdk:3.21.0")
+    implementation(libs.naver.map.compose)
+    implementation(libs.accompanist.permissions)
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -70,6 +75,15 @@ dependencies {
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
+
+    // Lottie
+    implementation(libs.lottie.compose)
+
+    // Coil
+    implementation(libs.coil.compose)
+
+    // WebView
+    implementation(libs.google.accompanist.webview)
 }
 
 ktlint {
@@ -78,4 +92,9 @@ ktlint {
     coloredOutput = true
     verbose = true
     outputToConsole = true
+}
+
+secrets {
+    propertiesFileName = "secrets.properties"
+    defaultPropertiesFileName = "local.defaults.properties"
 }
