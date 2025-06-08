@@ -12,5 +12,5 @@ data class StoreEntity(
     val longitude: Double = 0.0,
     val geohash: String = "",
     val search_keywords: List<String> = emptyList(),
-    val items: List<Item> = emptyList()
+    val items: List<Item> = emptyList(),
 )

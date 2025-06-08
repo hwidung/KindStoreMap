@@ -6,10 +6,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.lifecycle.lifecycleScope
-import com.google.firebase.database.FirebaseDatabase
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
@@ -18,19 +14,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
+import com.google.firebase.database.FirebaseDatabase
 import com.konkuk.kindmap.main.MainScreen
 import com.konkuk.kindmap.splash.SplashScreen
 import com.konkuk.kindmap.ui.theme.KindMapTheme
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
 
-        //firebase 테스트용 함수입니다. 필요시 주석 풀고 사용하세요.
+        // firebase 테스트용 함수입니다. 필요시 주석 풀고 사용하세요.
 //        testFirebase()
 
         setContent {
@@ -77,14 +76,14 @@ class MainActivity : ComponentActivity() {
                     Log.d("Firebase findAll", "ID: ${store.sh_id}, Name: ${store.sh_name}, Addr: ${store.sh_addr}, GeoHash: ${store.geohash}")
                 }
             }
-            //랭킹 테스트
+            // 랭킹 테스트
             val limit = 30 // 원하는 갯수 지정
             storeRepository.findTopByRecommendation(limit).collectLatest { stores ->
                 Log.d("FirebaseTest findTopByRecommendation", "Top $limit Stores by Recommendation")
                 stores.forEachIndexed { index, store ->
                     Log.d(
                         "FirebaseTest findTopByRecommendation",
-                        "${index + 1}. ID: ${store.sh_id}, Name: ${store.sh_name}, sh_rcmn: ${store.sh_rcmn}"
+                        "${index + 1}. ID: ${store.sh_id}, Name: ${store.sh_name}, sh_rcmn: ${store.sh_rcmn}",
                     )
                 }
             }
@@ -118,7 +117,7 @@ class MainActivity : ComponentActivity() {
                     stores.forEach { store ->
                         Log.d(
                             "FirebaseTest findByIndutyCodeAndNearby",
-                            "ID: ${store.sh_id}, Name: ${store.sh_name}, Code: ${store.induty_code_se}, Lat: ${store.latitude}, Lng: ${store.longitude}"
+                            "ID: ${store.sh_id}, Name: ${store.sh_name}, Code: ${store.induty_code_se}, Lat: ${store.latitude}, Lng: ${store.longitude}",
                         )
                     }
                 }
