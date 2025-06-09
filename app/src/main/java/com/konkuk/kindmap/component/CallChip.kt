@@ -1,7 +1,7 @@
 package com.konkuk.kindmap.component
 
 import android.content.Intent
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -27,8 +27,7 @@ fun CallChip(
     Row(
         modifier =
             modifier
-                .border(
-                    width = 1.dp,
+                .background(
                     color = KindMapTheme.colors.orange,
                     shape = RoundedCornerShape(10),
                 )
@@ -45,7 +44,7 @@ fun CallChip(
     ) {
         Text(
             text = "전화 걸기",
-            color = KindMapTheme.colors.orange,
+            color = KindMapTheme.colors.white,
             style = KindMapTheme.typography.caption_m_9,
         )
     }
