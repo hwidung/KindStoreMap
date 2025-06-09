@@ -14,9 +14,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.database.FirebaseDatabase
 import com.konkuk.kindmap.main.MainScreen
+import com.konkuk.kindmap.main.MainViewModel
+import com.konkuk.kindmap.main.MainViewModelFactory
 import com.konkuk.kindmap.splash.SplashScreen
 import com.konkuk.kindmap.ui.theme.KindMapTheme
 import kotlinx.coroutines.delay
@@ -29,10 +32,14 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
 
-        // firebase 테스트용 함수입니다. 필요시 주석 풀고 사용하세요.
-//        testFirebase()
+        val databaseRef = FirebaseDatabase.getInstance().reference.child("STORE")
+        val storeRepository = StoreRepository(databaseRef)
+
+        val viewModelFactory = MainViewModelFactory(storeRepository)
+        val viewModel = ViewModelProvider(this, viewModelFactory) [MainViewModel::class.java]
 
         setContent {
+            val rememberedViewModel = remember { viewModel }
             var showSplash by remember { mutableStateOf(true) }
             KindMapTheme {
                 LaunchedEffect(Unit) {
@@ -43,7 +50,10 @@ class MainActivity : ComponentActivity() {
                     if (showSplash) {
                         SplashScreen(innerPaddingValues = innerPadding)
                     } else {
-                        MainScreen(innerPaddingValues = innerPadding)
+                        MainScreen(
+                            viewModel = rememberedViewModel,
+                            innerPaddingValues = innerPadding,
+                        )
                     }
                 }
             }

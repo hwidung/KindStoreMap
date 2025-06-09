@@ -25,7 +25,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
@@ -33,12 +32,12 @@ import androidx.core.view.drawToBitmap
 import coil.compose.AsyncImage
 import com.konkuk.kindmap.R
 import com.konkuk.kindmap.component.type.CategoryChipType
-import com.konkuk.kindmap.model.DummyStoreDetail
+import com.konkuk.kindmap.model.uimodel.StoreUiModel
 import com.konkuk.kindmap.ui.theme.KindMapTheme
 
 @Composable
 fun ShareCard(
-    dummyStoreDetail: DummyStoreDetail,
+    storeUiModel: StoreUiModel?,
     onDismissRequest: () -> Unit,
     onSharedClick: (Bitmap) -> Unit,
     modifier: Modifier = Modifier,
@@ -57,7 +56,7 @@ fun ShareCard(
                     ComposeView(ctx).apply {
                         captureRef.value = this
                         setContent {
-                            ShareCardContent(dummyStoreDetail = dummyStoreDetail)
+                            ShareCardContent(storeUiModel = storeUiModel)
                         }
                     }
                 },
@@ -93,7 +92,7 @@ fun ShareCard(
 
 @Composable
 fun ShareCardContent(
-    dummyStoreDetail: DummyStoreDetail,
+    storeUiModel: StoreUiModel?,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -123,25 +122,25 @@ fun ShareCardContent(
             }
             Spacer(Modifier.height(20.dp))
             CategoryChip(
-                categoryChipType = dummyStoreDetail.category,
+                categoryChipType = storeUiModel?.category ?: CategoryChipType.Etc,
                 onClick = {},
                 isSelected = true,
             )
             Spacer(Modifier.height(12.dp))
             Text(
-                text = dummyStoreDetail.name,
+                text = storeUiModel?.name ?: "",
                 color = KindMapTheme.colors.gray03,
                 style = KindMapTheme.typography.head_b_30,
             )
             Spacer(Modifier.height(20.dp))
-            if (dummyStoreDetail.imageUrl.isNullOrEmpty()) {
+            if (storeUiModel?.imageUrl.isNullOrEmpty()) {
                 Image(
                     painter = painterResource(id = R.drawable.cert_img),
                     contentDescription = null,
                 )
             } else {
                 AsyncImage(
-                    model = dummyStoreDetail.imageUrl,
+                    model = storeUiModel.imageUrl,
                     contentDescription = null,
                     modifier =
                         Modifier
@@ -153,7 +152,7 @@ fun ShareCardContent(
                 )
             }
             Spacer(Modifier.height(25.dp))
-            dummyStoreDetail.address?.let {
+            storeUiModel?.address?.let {
                 Text(
                     text = it,
                     color = KindMapTheme.colors.gray03,
@@ -165,23 +164,4 @@ fun ShareCardContent(
             Spacer(Modifier.height(40.dp))
         }
     }
-}
-
-@Preview
-@Composable
-private fun ShareCardPrev() {
-    ShareCard(
-        dummyStoreDetail =
-            DummyStoreDetail(
-                id = 1,
-                category = CategoryChipType.Japanese,
-                name = "명신 미용실",
-                address = "서울특별시 광진구 자양로37길 8 (구의동)",
-                phone = "453-2774",
-                description = "가격이 저렴하다고 해서 실력이 모자라는 건 절대아닙니다\\r\\n20년전통과 기술로 만족을 드립니다.",
-                imageUrl = null,
-            ),
-        onDismissRequest = {},
-        onSharedClick = {},
-    )
 }

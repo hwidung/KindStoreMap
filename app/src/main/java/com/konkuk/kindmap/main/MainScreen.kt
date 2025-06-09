@@ -1,6 +1,6 @@
 package com.konkuk.kindmap.main
 
-import android.R.attr.onClick
+import android.R.attr.category
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -24,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.kindmap.component.CategoryChip
 import com.konkuk.kindmap.component.DetailBottomSheet
 import com.konkuk.kindmap.component.MarkerChip
@@ -32,21 +34,26 @@ import com.konkuk.kindmap.component.SearchLottieChip
 import com.konkuk.kindmap.component.ShareCard
 import com.konkuk.kindmap.component.type.CategoryChipType
 import com.konkuk.kindmap.map.NaverMapScreen
-import com.konkuk.kindmap.model.DummyStoreDetail
+import com.konkuk.kindmap.model.uimodel.StoreUiModel
 import com.konkuk.kindmap.ui.theme.KindMapTheme
 import com.konkuk.kindmap.ui.util.SharedPrepare
 
 @Composable
 fun MainScreen(
+    viewModel: MainViewModel,
     modifier: Modifier = Modifier,
     innerPaddingValues: PaddingValues = PaddingValues(0.dp),
 ) {
     var bottomSheetVisibility by remember { mutableStateOf(false) }
     var shareDialogVisibility by remember { mutableStateOf(false) }
-    var selectedCategory by remember { mutableStateOf(CategoryChipType.All) }
-    var selectedMarker by remember { mutableStateOf<DummyStoreDetail?>(null) }
     var webViewVisible by remember { mutableStateOf(false) }
-    var selectedStar by remember { mutableStateOf(1) }
+
+    var selectedCategory by remember { mutableStateOf(CategoryChipType.All) }
+    var selectedMarker by remember { mutableStateOf<StoreUiModel?>(null) }
+    var selectedRecommendCount by remember { mutableIntStateOf(0) }
+
+    val store by viewModel.store.collectAsStateWithLifecycle()
+    val storeList by viewModel.storeList.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
 
@@ -57,7 +64,7 @@ fun MainScreen(
                 .padding(innerPaddingValues)
                 .background(color = KindMapTheme.colors.white),
     ) {
-        // Todo : Image을 지우고, Naver Map 뷰를 구현해주세요.
+        // Todo : Naver Map 뷰를 구현해주세요.
         NaverMapScreen()
 
         Row(
@@ -69,7 +76,7 @@ fun MainScreen(
         ) {
             SearchLottieChip(
                 onClick = {
-                    // Todo : selectedCategory 기반 API 호출이 예상됨
+                    viewModel.findByCategoryCode(categoryCode = selectedCategory.code)
                 },
             )
             Spacer(Modifier.width(10.dp))
@@ -100,20 +107,28 @@ fun MainScreen(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            items(CategoryChipType.entries) { category ->
+            items(storeList) { store ->
                 MarkerChip(
-                    categoryChipType = category,
+                    categoryChipType = store.category,
                     onClick = { marker ->
                         selectedMarker =
-                            DummyStoreDetail(
-                                id = 1,
-                                category = category,
-                                name = "명신 미용실",
-                                address = "서울특별시 광진구 자양로37길 8 (구의동)",
-                                phone = "453-2774",
-                                description = "가격이 저렴하다고 해서 실력이 모자라는 건 절대아닙니다\\r\\n20년전통과 기술로 만족을 드립니다.",
-                                imageUrl = null,
+                            StoreUiModel(
+                                id = store.id,
+                                categoryCode = store.categoryCode,
+                                category = store.category,
+                                name = store.name,
+                                address = store.address,
+                                phone = store.phone,
+                                description = store.description,
+                                imageUrl = store.imageUrl,
+                                recommendCount = store.recommendCount,
+                                latitude = store.longitude,
+                                longitude = store.longitude,
+                                geoHash = store.geoHash,
+                                keywords = store.keywords,
+                                menus = store.menus,
                             )
+                        selectedRecommendCount = store.recommendCount ?: 0
                         bottomSheetVisibility = true
                     },
                 )
@@ -144,27 +159,17 @@ fun MainScreen(
     if (bottomSheetVisibility && selectedMarker != null) {
         DetailBottomSheet(
             onDismissRequest = { bottomSheetVisibility = false },
-            dummyStoreDetail = selectedMarker!!,
+            storeUiModel = selectedMarker!!,
             onSharedClick = {
                 shareDialogVisibility = true
             },
-            selectedStar = selectedStar,
-            onStarChanged = { selectedStar = it },
+            selectedStar = selectedRecommendCount,
         )
     }
 
     if (shareDialogVisibility) {
         ShareCard(
-            dummyStoreDetail =
-                DummyStoreDetail(
-                    id = 1,
-                    category = CategoryChipType.Japanese,
-                    name = "명신 미용실",
-                    address = "서울특별시 광진구 자양로37길 8 (구의동)",
-                    phone = "453-2774",
-                    description = "가격이 저렴하다고 해서 실력이 모자라는 건 절대아닙니다\\r\\n20년전통과 기술로 만족을 드립니다.",
-                    imageUrl = null,
-                ),
+            storeUiModel = store,
             onDismissRequest = { shareDialogVisibility = false },
             onSharedClick = { bitmap ->
                 SharedPrepare.prepareShare(
