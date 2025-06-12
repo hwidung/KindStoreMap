@@ -20,9 +20,12 @@ import androidx.compose.ui.unit.dp
 import com.konkuk.kindmap.component.type.CategoryChipType
 import com.konkuk.kindmap.ui.theme.KindMapTheme
 import com.konkuk.kindmap.ui.theme.kindMapColors
+import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import com.naver.maps.map.compose.NaverMapComposable
+
 
 @Composable
-fun MarkerChip(
+public fun MarkerChip(
     categoryChipType: CategoryChipType,
     onClick: (CategoryChipType) -> Unit,
     modifier: Modifier = Modifier,

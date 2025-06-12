@@ -1,10 +1,13 @@
 package com.konkuk.kindmap.main
 
 import StoreRepository
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.konkuk.kindmap.map.getCurrentLocation
 import com.konkuk.kindmap.model.mapper.toUiModel
 import com.konkuk.kindmap.model.uimodel.StoreUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,16 +24,33 @@ class MainViewModelFactory(private val repository: StoreRepository) : ViewModelP
     }
 }
 
-class MainViewModel(private val repository: StoreRepository) : ViewModel() {
+class MainViewModel(private val repository: StoreRepository,
+//                    private val context: Context,
+//                    private val fusedLocationClient: FusedLocationProviderClient
+) : ViewModel() {
+
+
     private val _store = MutableStateFlow<StoreUiModel?>(null)
     val store: StateFlow<StoreUiModel?> = _store
     private val _storeList = MutableStateFlow<List<StoreUiModel>>(emptyList())
     val storeList: StateFlow<List<StoreUiModel>> = _storeList
 
-    init {
+    fun init(context: Context, fusedLocationClient: FusedLocationProviderClient) {
         // Todo : 현재 지도 기반으로 변경 필요
-        findAll()
+        viewModelScope.launch {
+            val defaultLatitude = 37.5488
+            val defaultLongitude = 127.0793
+
+            val currentLocation = getCurrentLocation(context, fusedLocationClient)
+            if(currentLocation != null){
+                findNearby(currentLocation.latitude, currentLocation.longitude, 1.0)
+            }
+            else {
+                findNearby(defaultLatitude, defaultLongitude, 1.0)
+            }
+        }
     }
+
 
     fun findById(id: Long) {
         viewModelScope.launch {
@@ -44,6 +64,16 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
         viewModelScope.launch {
             repository.findAll().collectLatest { stores ->
                 _storeList.value = stores.map { it.toUiModel() }
+            }
+        }
+    }
+
+    fun findNearby(latitude: Double, longitude: Double, radiusKm: Double) {
+        viewModelScope.launch {
+            repository.findNearby(latitude, longitude, radiusKm).collectLatest { stores ->
+                _storeList.value = stores.map { it.toUiModel()}
+                Log.d("viewModel", "Nearby Store Count: ${stores.size}") //
+
             }
         }
     }

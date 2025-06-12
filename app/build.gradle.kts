@@ -1,4 +1,5 @@
 import org.gradle.kotlin.dsl.implementation
+import org.gradle.kotlin.dsl.secrets
 
 plugins {
     alias(libs.plugins.android.application)
@@ -18,6 +19,12 @@ android {
     namespace = "com.konkuk.kindmap"
     compileSdk = 35
 
+    buildFeatures{
+        buildFeatures{
+            buildConfig = true
+        }
+    }
+
     defaultConfig {
         applicationId = "com.konkuk.kindmap"
         minSdk = 29
@@ -26,6 +33,16 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField(
+            "String",
+            "NAVER_CLIENT_ID",
+            "\"${providers.gradleProperty("NAVER_CLIENT_ID").getOrElse("")}\""
+        )
+        buildConfigField(
+            "String",
+            "NAVER_CLIENT_SECRET",
+            "\"${providers.gradleProperty("NAVER_CLIENT_SECRET").getOrElse("")}\""
+        )
     }
 
     buildTypes {
@@ -65,6 +82,8 @@ dependencies {
     implementation(libs.naver.map.compose)
     implementation(libs.accompanist.permissions)
     implementation(libs.play.services.location)
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -98,3 +117,4 @@ secrets {
     propertiesFileName = "secrets.properties"
     defaultPropertiesFileName = "local.defaults.properties"
 }
+
