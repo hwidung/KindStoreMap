@@ -13,5 +13,5 @@ data class StoreEntity(
     val geohash: String = "",
     val search_keywords: List<String> = emptyList(),
     val items: List<Item> = emptyList(),
-    val sh_image: String = ""
+    val sh_image: String = "",
 )
