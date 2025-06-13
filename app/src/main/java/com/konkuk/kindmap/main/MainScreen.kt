@@ -1,5 +1,6 @@
 package com.konkuk.kindmap.main
 
+import android.location.Location
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -58,30 +59,15 @@ fun MainScreen(
     val selectedMarker = remember { mutableStateOf<StoreUiModel?>(null) }
     //var selectedRecommendCount by remember { mutableIntStateOf(0) }
     val selectedRecommendCount = remember { mutableIntStateOf(0) }
-
     val store by viewModel.store.collectAsStateWithLifecycle()
-    val storeList by viewModel.storeList.collectAsStateWithLifecycle()
-
     val context = LocalContext.current
-    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-
-    var currentLocation by remember { mutableStateOf<LatLng?>(null) }
-
-    LaunchedEffect(storeList) {
-        Log.d("MainScreen", "현재 storeList 크기: ${storeList.size}")
-    }
+    val fusedLocationSource = LocationServices.getFusedLocationProviderClient(context)
 
     LaunchedEffect(Unit) {
-        val location = getCurrentLocation(context, fusedLocationClient)
-        currentLocation = location
-        if (location != null) {
-            Log.d("MainScreen", "사용자 위치: $location")
-            viewModel.findNearby(location.latitude, location.longitude, 1.0)
-        } else {
-            viewModel.findNearby(37.5488, 127.0793, 1.0) //사용자 위치 못받으면 건대로
-        }
-
+        viewModel.init(context, fusedLocationSource)
     }
+
+    val storeList by viewModel.storeList.collectAsStateWithLifecycle()
 
     Box(
         modifier =
@@ -97,10 +83,7 @@ fun MainScreen(
             storeList = storeList,
             currentLocation = currentLocation
         ) */ // 내가 마커를 띄울 수 있는걸로
-        NaverMapScreen(viewModel = viewModel,
-                    selectedMarker = selectedMarker,
-                    selectedRecommendCount = selectedRecommendCount,
-                    bottomSheetVisibility = bottomSheetVisibility)
+        NaverMapScreen(viewModel = viewModel)
 
         Row(
             modifier =

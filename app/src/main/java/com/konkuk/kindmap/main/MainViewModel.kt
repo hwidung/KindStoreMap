@@ -38,15 +38,14 @@ class MainViewModel(private val repository: StoreRepository,
     fun init(context: Context, fusedLocationClient: FusedLocationProviderClient) {
         // Todo : 현재 지도 기반으로 변경 필요
         viewModelScope.launch {
-            val defaultLatitude = 37.5488
-            val defaultLongitude = 127.0793
-
             val currentLocation = getCurrentLocation(context, fusedLocationClient)
             if(currentLocation != null){
                 findNearby(currentLocation.latitude, currentLocation.longitude, 1.0)
+                Log.d("viewModel", "내 위치: ${currentLocation.latitude}, ${currentLocation.longitude}")
             }
             else {
-                findNearby(defaultLatitude, defaultLongitude, 1.0)
+                findNearby(37.5488, 127.0793, 1.0)
+                Log.d("viewModel", "내위치 찾을수 없음")
             }
         }
     }

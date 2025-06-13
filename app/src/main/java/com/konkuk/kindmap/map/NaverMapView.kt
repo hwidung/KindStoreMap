@@ -80,30 +80,30 @@ fun NaverMapView(
                 )
             }
             storeList.forEach { store ->
-            MarkerChip( // 이부분
-                    categoryChipType = store.category,
-                    onClick = { marker ->
-                        selectedMarker.value =
-                            StoreUiModel(
-                                id = store.id,
-                                categoryCode = store.categoryCode,
-                                category = store.category,
-                                name = store.name,
-                                address = store.address,
-                                phone = store.phone,
-                                description = store.description,
-                                imageUrl = store.imageUrl,
-                                recommendCount = store.recommendCount,
-                                latitude = store.longitude,
-                                longitude = store.longitude,
-                                geoHash = store.geoHash,
-                                keywords = store.keywords,
-                                menus = store.menus,
-                            )
-                        selectedRecommendCount.value = store.recommendCount ?: 0
-                        bottomSheetVisibility.value = true
-                    },
-                )
+//            MarkerChip( // 이부분
+//                    categoryChipType = store.category,
+//                    onClick = { marker ->
+//                        selectedMarker.value =
+//                            StoreUiModel(
+//                                id = store.id,
+//                                categoryCode = store.categoryCode,
+//                                category = store.category,
+//                                name = store.name,
+//                                address = store.address,
+//                                phone = store.phone,
+//                                description = store.description,
+//                                imageUrl = store.imageUrl,
+//                                recommendCount = store.recommendCount,
+//                                latitude = store.longitude,
+//                                longitude = store.longitude,
+//                                geoHash = store.geoHash,
+//                                keywords = store.keywords,
+//                                menus = store.menus,
+//                            )
+//                        selectedRecommendCount.value = store.recommendCount ?: 0
+//                        bottomSheetVisibility.value = true
+//                    },
+//                )
                 /* Marker(
                     state = rememberMarkerState(position = LatLng(store.latitude, store.longitude)),
                     captionText = store.name
