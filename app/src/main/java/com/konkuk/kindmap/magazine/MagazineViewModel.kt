@@ -22,8 +22,6 @@ class MagazineViewModelFactory(private val repository: MagazineRepository) : Vie
 }
 
 class MagazineViewModel(private val repository: MagazineRepository) : ViewModel() {
-
-
     private val _magazines = MutableStateFlow<List<Magazine>>(emptyList())
     val magazines: StateFlow<List<Magazine>> = _magazines.asStateFlow()
 

@@ -6,7 +6,6 @@ import com.konkuk.kindmap.model.Magazine
 import kotlinx.coroutines.tasks.await
 
 class MagazineRepository {
-
     suspend fun getAllMagazines(): Result<List<Magazine>> {
         return try {
             val database = Firebase.database
@@ -14,10 +13,11 @@ class MagazineRepository {
             val snapshot = magazinesRef.orderByChild("publish_date").get().await()
 
             if (snapshot.exists()) {
-                val magazines = snapshot.children.mapNotNull { dataSnapshot ->
-                    dataSnapshot.getValue(Magazine::class.java)
-                        ?.copy(id = dataSnapshot.key ?: "")
-                }.sortedByDescending { it.publish_date }
+                val magazines =
+                    snapshot.children.mapNotNull { dataSnapshot ->
+                        dataSnapshot.getValue(Magazine::class.java)
+                            ?.copy(id = dataSnapshot.key ?: "")
+                    }.sortedByDescending { it.publish_date }
                 Result.success(magazines)
             } else {
                 Result.success(emptyList())
