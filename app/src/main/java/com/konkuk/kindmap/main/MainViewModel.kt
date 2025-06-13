@@ -1,7 +1,6 @@
 package com.konkuk.kindmap.main
 
 import StoreRepository
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -49,11 +48,10 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
     }
 
     fun findByCategoryCode(categoryCode: Long) {
-        if (categoryCode == CATEGORY_ALL)
-            {
-                findAll()
-                return
-            }
+        if (categoryCode == CATEGORY_ALL) {
+            findAll()
+            return
+        }
         viewModelScope.launch {
             repository.findByIndutyCode(categoryCode).collectLatest { stores ->
                 _storeList.value = stores.map { it.toUiModel() }
