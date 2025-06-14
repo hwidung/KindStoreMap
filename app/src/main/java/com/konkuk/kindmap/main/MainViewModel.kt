@@ -77,6 +77,15 @@ class MainViewModel(private val repository: StoreRepository,
         }
     }
 
+    fun findByIndutyCodeAndNearby(indutyCode: Long, latitude: Double, longitude: Double, radiusKm: Double) {
+        viewModelScope.launch {
+            repository.findByIndutyCodeAndNearby(indutyCode, latitude, longitude, radiusKm).collectLatest { stores ->
+                _storeList.value = stores.map { it.toUiModel() }
+                Log.d("viewModel", "IndutyCode and Nearby Store Count: ${stores.size}")
+            }
+        }
+    }
+
     fun findByCategoryCode(categoryCode: Long) {
         if (categoryCode == CATEGORY_ALL)
             {
