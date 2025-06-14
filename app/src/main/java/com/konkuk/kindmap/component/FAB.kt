@@ -18,6 +18,9 @@ import com.konkuk.kindmap.ui.theme.KindMapTheme
 @Composable
 fun FAB(
     modifier: Modifier = Modifier,
+    onMagazineClick: () -> Unit,
+    onRankingClick: () -> Unit,
+    onReviewClick: () -> Unit,
 ) {
     var showFABAll by remember { mutableStateOf(false) }
 
@@ -30,10 +33,13 @@ fun FAB(
         ) {
             if (showFABAll) {
                 FloatingActionButton(onClick = { /* 예: 가게 등록 */ }) {
-                    Text("가게 등록")
+                    Text("매거진")
                 }
                 FloatingActionButton(onClick = { /* 예: 즐겨찾기 */ }) {
-                    Text("즐겨찾기")
+                    Text("랭킹보기")
+                }
+                FloatingActionButton(onClick = { onReviewClick() }) {
+                    Text("리뷰")
                 }
                 FloatingActionButton(onClick = { showFABAll = false }) {
                     Text("닫기")

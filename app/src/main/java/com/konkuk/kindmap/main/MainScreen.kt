@@ -33,6 +33,7 @@ import com.konkuk.kindmap.component.type.CategoryChipType
 import com.konkuk.kindmap.map.NaverMapScreen
 import com.konkuk.kindmap.model.uimodel.StoreUiModel
 import com.konkuk.kindmap.ui.theme.KindMapTheme
+import com.konkuk.kindmap.ui.util.HandleDoubleBackToExit
 import com.konkuk.kindmap.ui.util.SharedPrepare
 
 @Composable
@@ -51,11 +52,13 @@ fun MainScreen(
     val context = LocalContext.current
     val fusedLocationSource = LocationServices.getFusedLocationProviderClient(context)
 
+    val storeList by viewModel.storeList.collectAsStateWithLifecycle()
+
+    context.HandleDoubleBackToExit()
+
     LaunchedEffect(Unit) {
         viewModel.init(context, fusedLocationSource)
     }
-
-    val storeList by viewModel.storeList.collectAsStateWithLifecycle()
 
     Box(
         modifier =
@@ -133,26 +136,17 @@ fun MainScreen(
         )
          */
 
-        // Todo : 웹뷰 테스트입니다. 수정 예정입니다.
         FAB(
             modifier =
                 Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(end = 23.dp),
-        )
-        /*
-        Button(
-            modifier =
-                Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 23.dp),
-            onClick = {
+                    .padding(end = 23.dp, bottom = 20.dp),
+            onMagazineClick = {},
+            onRankingClick = {},
+            onReviewClick = {
                 webViewVisible = true
             },
-        ) {
-            Text("웹뷰테스트")
-        }
-         */
+        )
     }
 
     if (webViewVisible) {
