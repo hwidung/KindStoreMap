@@ -18,19 +18,15 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.konkuk.kindmap.component.type.CategoryChipType
 import com.konkuk.kindmap.ui.theme.KindMapTheme
 import com.konkuk.kindmap.ui.theme.kindMapColors
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.NaverMap
-import com.naver.maps.map.compose.NaverMapComposable
-import com.naver.maps.map.compose.rememberCameraPositionState
 
 @OptIn(ExperimentalNaverMapApi::class, ExperimentalPermissionsApi::class)
 @Composable
@@ -67,11 +63,10 @@ public fun MarkerChip(
                         onClick(categoryChipType)
                     },
             contentAlignment = Alignment.Center,
-        )
-        {
+        ) {
             NaverMap(
                 modifier = Modifier.fillMaxSize(),
-                cameraPositionState = cameraPositionState
+                cameraPositionState = cameraPositionState,
             )
 
             Text(

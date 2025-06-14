@@ -19,8 +19,8 @@ android {
     namespace = "com.konkuk.kindmap"
     compileSdk = 35
 
-    buildFeatures{
-        buildFeatures{
+    buildFeatures {
+        buildFeatures {
             buildConfig = true
         }
     }
@@ -36,12 +36,12 @@ android {
         buildConfigField(
             "String",
             "NAVER_CLIENT_ID",
-            "\"${providers.gradleProperty("NAVER_CLIENT_ID").getOrElse("")}\""
+            "\"${providers.gradleProperty("NAVER_CLIENT_ID").getOrElse("")}\"",
         )
         buildConfigField(
             "String",
             "NAVER_CLIENT_SECRET",
-            "\"${providers.gradleProperty("NAVER_CLIENT_SECRET").getOrElse("")}\""
+            "\"${providers.gradleProperty("NAVER_CLIENT_SECRET").getOrElse("")}\"",
         )
     }
 
@@ -117,4 +117,3 @@ secrets {
     propertiesFileName = "secrets.properties"
     defaultPropertiesFileName = "local.defaults.properties"
 }
-

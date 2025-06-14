@@ -30,15 +30,17 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
     private val _storeList = MutableStateFlow<List<StoreUiModel>>(emptyList())
     val storeList: StateFlow<List<StoreUiModel>> = _storeList
 
-    fun init(context: Context, fusedLocationClient: FusedLocationProviderClient) {
+    fun init(
+        context: Context,
+        fusedLocationClient: FusedLocationProviderClient,
+    ) {
         // Todo : 현재 지도 기반으로 변경 필요
         viewModelScope.launch {
             val currentLocation = getCurrentLocation(context, fusedLocationClient)
-            if(currentLocation != null){
+            if (currentLocation != null) {
                 findNearby(currentLocation.latitude, currentLocation.longitude, 1.0)
                 Log.d("viewModel", "내 위치: ${currentLocation.latitude}, ${currentLocation.longitude}")
-            }
-            else {
+            } else {
                 findNearby(37.5488, 127.0793, 1.0)
                 Log.d("viewModel", "내위치 찾을수 없음")
             }
@@ -61,12 +63,15 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
         }
     }
 
-    fun findNearby(latitude: Double, longitude: Double, radiusKm: Double) {
+    fun findNearby(
+        latitude: Double,
+        longitude: Double,
+        radiusKm: Double,
+    ) {
         viewModelScope.launch {
             repository.findNearby(latitude, longitude, radiusKm).collectLatest { stores ->
-                _storeList.value = stores.map { it.toUiModel()}
+                _storeList.value = stores.map { it.toUiModel() }
                 Log.d("viewModel", "Nearby Store Count: ${stores.size}") //
-
             }
         }
     }
