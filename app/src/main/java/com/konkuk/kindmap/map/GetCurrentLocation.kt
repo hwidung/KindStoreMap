@@ -10,12 +10,11 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 
 suspend fun getCurrentLocation(
     context: Context,
-    fusedLocationClient: FusedLocationProviderClient,
+    fusedLocationClient: FusedLocationProviderClient
 ): LatLng? {
-    val hasPermission =
-        ContextCompat.checkSelfPermission(
-            context, Manifest.permission.ACCESS_FINE_LOCATION,
-        ) == PackageManager.PERMISSION_GRANTED
+    val hasPermission = ContextCompat.checkSelfPermission(
+        context, Manifest.permission.ACCESS_FINE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
 
     if (!hasPermission) {
         return null

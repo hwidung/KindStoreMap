@@ -1,3 +1,4 @@
+import android.util.Log
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryEventListener
@@ -45,6 +46,7 @@ class StoreRepository(private val table: DatabaseReference) {
                 query.removeEventListener(listener)
             }
         }
+
 
     fun findAll(): Flow<List<StoreEntity>> =
         callbackFlow {
@@ -137,6 +139,7 @@ class StoreRepository(private val table: DatabaseReference) {
                     }
 
                     override fun onGeoQueryReady() {
+                        Log.d("GeoFire", "findNearby: ${ids.size}개의 id 수집됨")
                         launch {
                             val stores =
                                 ids.map { id ->
@@ -191,6 +194,7 @@ class StoreRepository(private val table: DatabaseReference) {
                     }
 
                     override fun onGeoQueryReady() {
+
                         launch {
                             val stores =
                                 matchedIds.mapNotNull { id ->
