@@ -1,9 +1,24 @@
 package com.konkuk.kindmap.map
 
 import android.Manifest
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -14,13 +29,18 @@ import com.google.android.gms.location.LocationServices
 import com.konkuk.kindmap.directions.DirectionsResponse
 import com.konkuk.kindmap.directions.DirectionsService
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.*
-import com.naver.maps.map.compose.*
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import com.naver.maps.map.compose.Marker
+import com.naver.maps.map.compose.MarkerState
+import com.naver.maps.map.compose.NaverMap
+import com.naver.maps.map.compose.PathOverlay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.let
 
 @OptIn(ExperimentalNaverMapApi::class, ExperimentalPermissionsApi::class)
 @Composable
@@ -29,7 +49,8 @@ fun Direction() {
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
     val coroutineScope = rememberCoroutineScope()
 
-    var selectionMode by remember { mutableStateOf<String?>(null) } // "start" or "goal"
+    // "start" or "goal"
+    var selectionMode by remember { mutableStateOf<String?>(null) }
     var useCurrentLocation by remember { mutableStateOf(false) }
     var startLocation by remember { mutableStateOf<LatLng?>(null) }
     var goalLocation by remember { mutableStateOf<LatLng?>(null) }
