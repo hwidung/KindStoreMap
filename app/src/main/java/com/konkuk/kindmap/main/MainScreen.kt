@@ -1,6 +1,5 @@
 package com.konkuk.kindmap.main
 
-import android.R.attr.category
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,8 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -28,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.kindmap.component.CategoryChip
 import com.konkuk.kindmap.component.DetailBottomSheet
+import com.konkuk.kindmap.component.FAB
 import com.konkuk.kindmap.component.MarkerChip
 import com.konkuk.kindmap.component.ReviewWebView
 import com.konkuk.kindmap.component.SearchLottieChip
@@ -136,6 +134,13 @@ fun MainScreen(
         }
 
         // Todo : 웹뷰 테스트입니다. 수정 예정입니다.
+        FAB(
+            modifier =
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 23.dp),
+        )
+        /*
         Button(
             modifier =
                 Modifier
@@ -147,6 +152,7 @@ fun MainScreen(
         ) {
             Text("웹뷰테스트")
         }
+         */
     }
 
     if (webViewVisible) {
