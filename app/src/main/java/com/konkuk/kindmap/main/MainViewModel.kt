@@ -24,12 +24,7 @@ class MainViewModelFactory(private val repository: StoreRepository) : ViewModelP
     }
 }
 
-class MainViewModel(private val repository: StoreRepository,
-//                    private val context: Context,
-//                    private val fusedLocationClient: FusedLocationProviderClient
-) : ViewModel() {
-
-
+class MainViewModel(private val repository: StoreRepository) : ViewModel() {
     private val _store = MutableStateFlow<StoreUiModel?>(null)
     val store: StateFlow<StoreUiModel?> = _store
     private val _storeList = MutableStateFlow<List<StoreUiModel>>(emptyList())
@@ -49,7 +44,6 @@ class MainViewModel(private val repository: StoreRepository,
             }
         }
     }
-
 
     fun findById(id: Long) {
         viewModelScope.launch {
@@ -78,11 +72,10 @@ class MainViewModel(private val repository: StoreRepository,
     }
 
     fun findByCategoryCode(categoryCode: Long) {
-        if (categoryCode == CATEGORY_ALL)
-            {
-                findAll()
-                return
-            }
+        if (categoryCode == CATEGORY_ALL) {
+            findAll()
+            return
+        }
         viewModelScope.launch {
             repository.findByIndutyCode(categoryCode).collectLatest { stores ->
                 _storeList.value = stores.map { it.toUiModel() }

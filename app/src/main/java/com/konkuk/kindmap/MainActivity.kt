@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
             // Id로 조회 테스트
             storeRepository.findById(10000L).collectLatest { store ->
                 if (store != null) {
-                    Log.d("Firebase findById", "ID: ${store.sh_id}, Name: ${store.sh_name}, Addr: ${store.sh_addr}, GeoHash: ${store.geohash}, latitude: ${store.latitude}, longitude: ${store.longitude}")
+                    Log.d("Firebase findById", "ID: ${store.sh_id}, Name: ${store.sh_name}, Addr: ${store.sh_addr}, Image: ${store.sh_image}, latitude: ${store.latitude}, longitude: ${store.longitude}")
                 } else {
                     Log.d("Firebase findById", "해당 ID의 가게를 찾을 수 없습니다.")
                 }
@@ -83,7 +83,7 @@ class MainActivity : ComponentActivity() {
             storeRepository.findAll().collectLatest { stores ->
                 Log.d("Firebase findAll", "Fetched ${stores.size} stores")
                 stores.forEach { store ->
-                    Log.d("Firebase findAll", "ID: ${store.sh_id}, Name: ${store.sh_name}, Addr: ${store.sh_addr}, GeoHash: ${store.geohash}")
+                    Log.d("Firebase findAll", "ID: ${store.sh_id}, Name: ${store.sh_name}, Addr: ${store.sh_addr}, Image: ${store.sh_image}")
                 }
             }
             // 랭킹 테스트
