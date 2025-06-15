@@ -47,7 +47,6 @@ class StoreRepository(private val table: DatabaseReference) {
             }
         }
 
-
     fun findAll(): Flow<List<StoreEntity>> =
         callbackFlow {
             try {
@@ -194,7 +193,6 @@ class StoreRepository(private val table: DatabaseReference) {
                     }
 
                     override fun onGeoQueryReady() {
-
                         launch {
                             val stores =
                                 matchedIds.mapNotNull { id ->

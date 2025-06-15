@@ -1,22 +1,15 @@
 package com.konkuk.kindmap.map
 
-import android.content.Context
-import androidx.annotation.ContentView
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
-import com.airbnb.lottie.animation.content.Content
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.konkuk.kindmap.component.MarkerChip
 import com.konkuk.kindmap.model.uimodel.StoreUiModel
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraPosition
-import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.LocationTrackingMode
 import com.naver.maps.map.compose.MapProperties
@@ -34,44 +27,41 @@ fun NaverMapView(
     selectedRecommendCount: MutableState<Int>,
     bottomSheetVisibility: MutableState<Boolean>,
     storeList: List<StoreUiModel>,
-    currentLocation : LatLng?,
-    modifier: Modifier = Modifier
+    currentLocation: LatLng?,
+    modifier: Modifier = Modifier,
 ) {
-
-
     val cameraPositionState = rememberCameraPositionState()
 
-    val permissionState = rememberMultiplePermissionsState(
-        permissions = listOf(
-            android.Manifest.permission.ACCESS_COARSE_LOCATION,
-            android.Manifest.permission.ACCESS_FINE_LOCATION
+    val permissionState =
+        rememberMultiplePermissionsState(
+            permissions =
+                listOf(
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                ),
         )
-    )
-
 
     LaunchedEffect(permissionState.allPermissionsGranted) {
-
-            permissionState.launchMultiplePermissionRequest()
-
+        permissionState.launchMultiplePermissionRequest()
     }
 
     val granted = permissionState.permissions.any { it.status.isGranted }
 
-
     val locationSource = rememberFusedLocationSource()
-
 
     if (granted) {
         NaverMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
             locationSource = locationSource,
-            properties = MapProperties(
-                locationTrackingMode = LocationTrackingMode.Face
-            ),
-            uiSettings = MapUiSettings(
-                isLocationButtonEnabled = true
-            )
+            properties =
+                MapProperties(
+                    locationTrackingMode = LocationTrackingMode.Face,
+                ),
+            uiSettings =
+                MapUiSettings(
+                    isLocationButtonEnabled = true,
+                ),
         ) {
             currentLocation?.let { userLocation ->
                 Marker(
@@ -110,11 +100,10 @@ fun NaverMapView(
                 )*/
             }
         }
-
     } else {
         NaverMap(
             modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState
+            cameraPositionState = cameraPositionState,
         )
     }
 }
