@@ -1,166 +1,213 @@
 package com.konkuk.kindmap.main
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.location.LocationServices
-import com.konkuk.kindmap.component.CategoryChip
-import com.konkuk.kindmap.component.FAB
-import com.konkuk.kindmap.component.ReviewWebView
-import com.konkuk.kindmap.component.SearchLottieChip
-import com.konkuk.kindmap.component.ShareCard
+import com.konkuk.kindmap.component.*
 import com.konkuk.kindmap.component.type.CategoryChipType
 import com.konkuk.kindmap.map.NaverMapScreen
-import com.konkuk.kindmap.model.uimodel.StoreUiModel
 import com.konkuk.kindmap.ui.theme.KindMapTheme
 import com.konkuk.kindmap.ui.util.HandleDoubleBackToExit
 import com.konkuk.kindmap.ui.util.SharedPrepare
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     viewModel: MainViewModel,
     modifier: Modifier = Modifier,
     innerPaddingValues: PaddingValues = PaddingValues(0.dp),
+    onRankingClick: () -> Unit, // 랭킹 버튼 클릭 이벤트를 받기 위한 파라미터 추가
+    onMagazineClick: () -> Unit, // 매거진 버튼 클릭 이벤트를 받기 위한 파라미터 추가
 ) {
-    var bottomSheetVisibility by remember { mutableStateOf(false) }
     var shareDialogVisibility by remember { mutableStateOf(false) }
     var webViewVisible by remember { mutableStateOf(false) }
 
-    var selectedCategory by remember { mutableStateOf(CategoryChipType.All) }
-    var selectedMarker = remember { mutableStateOf<StoreUiModel?>(null) }
-    val store by viewModel.store.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val fusedLocationSource = LocationServices.getFusedLocationProviderClient(context)
-
     val storeList by viewModel.storeList.collectAsStateWithLifecycle()
+    val selectedCategory by viewModel.selectedCategory.collectAsStateWithLifecycle()
+    val selectedStore by viewModel.store.collectAsStateWithLifecycle()
+    val cameraPosition by viewModel.cameraPosition.collectAsStateWithLifecycle()
+
+    val context = LocalContext.current
+    val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
+
+    val locationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = { permissions ->
+            if (permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false)) {
+                viewModel.searchNearbyStores(context, fusedLocationClient)
+            } else {
+                Toast.makeText(context, "위치 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
+                viewModel.searchNearbyStores(context, fusedLocationClient)
+            }
+        }
+    )
 
     context.HandleDoubleBackToExit()
 
-    LaunchedEffect(Unit) {
-        viewModel.init(context, fusedLocationSource)
-    }
-
     Box(
-        modifier =
-            modifier
-                .fillMaxSize()
-                .padding(innerPaddingValues)
-                .background(color = KindMapTheme.colors.white),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(innerPaddingValues)
+            .background(color = KindMapTheme.colors.white),
     ) {
-//        NaverMapView(
-//            context = context,
-//            fusedLocationClient = fusedLocationClient,
-//            storeList = storeList,
-//            currentLocation = currentLocation
-//        )
-
-        // 내가 마커를 띄울 수 있는걸로
-        NaverMapScreen(viewModel = viewModel)
+        NaverMapScreen(
+            modifier = Modifier.fillMaxSize(),
+            stores = storeList,
+            cameraPosition = cameraPosition,
+            onMarkerClick = { store -> viewModel.findById(store.id.toLong()) }
+        )
 
         Row(
-            modifier =
-                Modifier
-                    .padding(top = 20.dp, start = 23.dp, end = 23.dp)
-                    .align(Alignment.TopStart),
-            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(top = 20.dp, start = 23.dp, end = 23.dp).align(Alignment.TopStart),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             SearchLottieChip(
                 onClick = {
-                    viewModel.findByCategoryCode(categoryCode = selectedCategory.code)
+                    val isGranted = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    if (isGranted) {
+                        viewModel.searchNearbyStores(context, fusedLocationClient)
+                    } else {
+                        locationPermissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
+                    }
                 },
             )
             Spacer(Modifier.width(10.dp))
-            LazyRow(
-                modifier =
-                Modifier,
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 items(CategoryChipType.entries) { category ->
                     CategoryChip(
                         categoryChipType = category,
-                        onClick = {
-                            selectedCategory = category
-                        },
+                        onClick = { viewModel.findByCategoryCode(category.code) },
                         isSelected = (selectedCategory == category),
                     )
                 }
             }
         }
 
-        // Todo : Marker 예시입니다
-
-        /*
-        MarkerChip(
-            categoryChipType = store?.category,
-            onClick = { marker ->
-                selectedMarker =
-                    StoreUiModel(
-                        id = store.id,
-                        categoryCode = store.categoryCode,
-                        category = store.category,
-                        name = store.name,
-                        address = store.address,
-                        phone = store.phone,
-                        description = store.description,
-                        imageUrl = store.imageUrl,
-                        recommendCount = store.recommendCount,
-                        latitude = store.longitude,
-                        longitude = store.longitude,
-                        geoHash = store.geoHash,
-                        keywords = store.keywords,
-                        menus = store.menus,
-                    )
-                bottomSheetVisibility = true
-            },
-        )
-         */
-
         FAB(
-            modifier =
-                Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 23.dp, bottom = 20.dp),
-            onMagazineClick = {},
-            onRankingClick = {},
-            onReviewClick = {
-                webViewVisible = true
+            modifier = Modifier.align(Alignment.BottomEnd).padding(end = 23.dp, bottom = 20.dp),
+            onMagazineClick = onMagazineClick,
+            onRankingClick = onRankingClick,
+            onReviewClick = { webViewVisible = true },
+        )
+
+        AnimatedVisibility(
+            visible = selectedStore != null,
+            enter = slideInVertically(initialOffsetY = { it }), // 아래에서 위로
+            exit = slideOutVertically(targetOffsetY = { it }), // 위에서 아래로
+        ) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.5f))
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null, // 클릭 시 물결 효과 제거
+                            onClick = { viewModel.clearSelectedStore() }
+                        )
+                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.6f)
+                        .align(Alignment.BottomCenter) // Box 안에서 하단 정렬
+                        .background(
+                            KindMapTheme.colors.white,
+                            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+                        )
+                ) {
+                    selectedStore?.let { store ->
+                        DetailBottomSheetContent(
+                            storeUiModel = store,
+                            onSharedClick = { shareDialogVisibility = true },
+                            selectedStar = store.recommendCount
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    if (shareDialogVisibility) {
+        ShareCard(
+            storeUiModel = selectedStore,
+            onDismissRequest = { shareDialogVisibility = false },
+            onSharedClick = { bitmap ->
+                SharedPrepare.prepareShare(
+                    context = context,
+                    bitmap = bitmap,
+                    onFailure = { Toast.makeText(context, "공유 실패", Toast.LENGTH_SHORT).show() },
+                )
+                shareDialogVisibility = false
             },
         )
     }
 
     if (webViewVisible) {
-        ReviewWebView(
-            url = "https://goodprice.go.kr/cmnt/reviewList.do",
-            onClose = { webViewVisible = false },
-        )
+        ReviewWebView(url = "https://goodprice.go.kr/cmnt/reviewList.do", onClose = { webViewVisible = false })
     }
 
-    //  Todo:현재 bottomSheetVisibility, selecterMarker, selectedRecommendCount 선언부분이 바뀌어서 오류가 나서 주석처리함. 수정 요망
+    // Todo : Marker 예시입니다
+
+
+
+
+
+
 
     /*
+    MarkerChip(
+        categoryChipType = store?.category,
+        onClick = { marker ->
+            selectedMarker =
+                StoreUiModel(
+                    id = store.id,
+                    categoryCode = store.categoryCode,
+                    category = store.category,
+                    name = store.name,
+                    address = store.address,
+                    phone = store.phone,
+                    description = store.description,
+                    imageUrl = store.imageUrl,
+                    recommendCount = store.recommendCount,
+                    latitude = store.longitude,
+                    longitude = store.longitude,
+                    geoHash = store.geoHash,
+                    keywords = store.keywords,
+                    menus = store.menus,
+                )
+            bottomSheetVisibility = true
+        },
+    )
+     */
+//  Todo:현재 bottomSheetVisibility, selecterMarker, selectedRecommendCount 선언부분이 바뀌어서 오류가 나서 주석처리함. 수정 요망
+    /*
     if (bottomSheetVisibility && selectedMarker != null) {
-        DetailBottomSheet(
+         DetailBottomSheet(
             onDismissRequest = { bottomSheetVisibility = false },
             storeUiModel = selectedMarker!!,
             onSharedClick = {
@@ -170,18 +217,4 @@ fun MainScreen(
         )
     }
      */
-
-    if (shareDialogVisibility) {
-        ShareCard(
-            storeUiModel = store,
-            onDismissRequest = { shareDialogVisibility = false },
-            onSharedClick = { bitmap ->
-                SharedPrepare.prepareShare(
-                    context = context,
-                    bitmap = bitmap,
-                    onFailure = { Toast.makeText(context, "공유 실패", Toast.LENGTH_SHORT).show() },
-                )
-            },
-        )
-    }
 }

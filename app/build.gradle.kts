@@ -75,7 +75,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+    implementation("androidx.compose.material3:material3:1.2.1")
     implementation(libs.firebase.database)
     implementation(libs.geofire.android)
     implementation("com.naver.maps:map-sdk:3.21.0")
