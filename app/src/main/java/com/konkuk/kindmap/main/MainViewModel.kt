@@ -42,12 +42,9 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
 
     val storeList: StateFlow<List<StoreUiModel>> =
         combine(_storeList, _selectedCategory) { stores, category ->
-            if (category == CategoryChipType.All) {
-                stores
-            } else {
-                stores.filter { store ->
-                    store.categoryCode == category.code
-                }
+            when (category) {
+                CategoryChipType.All -> stores
+                else -> stores.filter { it.categoryCode == category.code }
             }
         }.stateIn(
             scope = viewModelScope,
@@ -84,9 +81,8 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
     }
 
     fun findByCategoryCode(categoryCode: Long) {
-        val category = CategoryChipType.entries.find { it.code == categoryCode }
-        if (category != null) {
-            _selectedCategory.value = category
+        CategoryChipType.entries.find { it.code == categoryCode }?.let {
+            _selectedCategory.value = it
         }
     }
 
@@ -96,24 +92,27 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
     ) {
         viewModelScope.launch {
             try {
-                val currentLocation = getCurrentLocation(context, fusedLocationClient)
-                val searchLatitude: Double
-                val searchLongitude: Double
-
-                if (currentLocation != null) {
-                    searchLatitude = currentLocation.latitude
-                    searchLongitude = currentLocation.longitude
-                } else {
-                    searchLatitude = 37.5408
-                    searchLongitude = 127.0794
-                }
-                val stores = repository.findNearby(searchLatitude, searchLongitude, 2.0)
+                val (lat, lng) = getSearchCoordinates(context, fusedLocationClient)
+                val stores = repository.findNearby(lat, lng, radiusKm = 2.0)
                 _storeList.value = stores.map { it.toUiModel() }
-                Log.d("viewModel", "Nearby Store Count: ${stores.size}")
+                Log.d("MainViewModel", "Nearby Store Count: ${stores.size}")
             } catch (e: Exception) {
-                Log.e("MainViewModel", "Error in searchNearbyStores", e)
+                Log.e("MainViewModel", "Error fetching nearby stores", e)
                 _storeList.value = emptyList()
             }
+        }
+    }
+
+    private suspend fun getSearchCoordinates(
+        context: Context,
+        fusedLocationClient: FusedLocationProviderClient,
+    ): Pair<Double, Double> {
+        val location = getCurrentLocation(context, fusedLocationClient)
+        return if (location != null) {
+            Pair(location.latitude, location.longitude)
+        } else {
+            // 서울 건국대 근처 기본값
+            Pair(37.5408, 127.0794)
         }
     }
 

@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.konkuk.kindmap.magazine.MagazineScreen
 import com.konkuk.kindmap.main.MainScreen
 import com.konkuk.kindmap.main.MainViewModel
 import com.konkuk.kindmap.main.MainViewModelFactory
@@ -53,7 +54,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate("rank")
                                 },
                                 onMagazineClick = {
-                                    // TODO: 매거진 버튼 클릭
+                                    navController.navigate("magazine")
                                 },
                             )
                         }
@@ -64,6 +65,10 @@ class MainActivity : ComponentActivity() {
                                     navController.navigateUp()
                                 },
                             )
+                        }
+
+                        composable("magazine") {
+                            MagazineScreen()
                         }
                     }
                 }

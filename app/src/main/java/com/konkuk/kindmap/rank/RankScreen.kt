@@ -14,7 +14,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -96,17 +99,16 @@ fun RankScreen(
                 )
                 Spacer(modifier = Modifier.height(15.dp))
             }
-            if (isLoading)
-                {
-                    item {
-                        Loading(
-                            modifier =
-                                Modifier
-                                    .fillMaxSize(),
-                            text = "랭킹을 불러오는 중입니다.",
-                        )
-                    }
-                } else {
+            if (isLoading) {
+                item {
+                    Loading(
+                        modifier =
+                            Modifier
+                                .fillMaxSize(),
+                        text = "랭킹을 불러오는 중입니다.",
+                    )
+                }
+            } else {
                 itemsIndexed(rankedStores) { index, store ->
                     RankItem(
                         rank = index + 1,

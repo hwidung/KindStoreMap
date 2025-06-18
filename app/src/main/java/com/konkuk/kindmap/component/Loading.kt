@@ -23,14 +23,13 @@ fun Loading(
         CircularProgressIndicator(
             color = KindMapTheme.colors.orange,
         )
-        if (text.isNotEmpty())
-            {
-                Spacer(Modifier.height(10.dp))
-                Text(
-                    text = text,
-                    color = KindMapTheme.colors.orange,
-                    style = KindMapTheme.typography.body_r_14,
-                )
-            }
+        if (text.isNotEmpty()) {
+            Spacer(Modifier.height(10.dp))
+            Text(
+                text = text,
+                color = KindMapTheme.colors.orange,
+                style = KindMapTheme.typography.body_r_14,
+            )
+        }
     }
 }
