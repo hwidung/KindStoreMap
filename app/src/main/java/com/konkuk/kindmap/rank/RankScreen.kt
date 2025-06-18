@@ -1,6 +1,7 @@
 package com.konkuk.kindmap.rank
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.konkuk.kindmap.R
+import com.konkuk.kindmap.component.Loading
 import com.konkuk.kindmap.repository.StoreRepository
 import com.konkuk.kindmap.ui.theme.KindMapTheme
 
@@ -39,61 +41,72 @@ fun RankScreen(
     val viewModel: RankViewModel = viewModel(factory = viewModelFactory)
 
     val rankedStores by viewModel.rankedStores.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
-    Scaffold(
-        modifier = modifier,
-        containerColor = KindMapTheme.colors.white,
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = "추천수 기반 착한가게 둘러보기 [Top 30]",
-                        style = KindMapTheme.typography.body_b_20,
-                        color = KindMapTheme.colors.orange,
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBackPress) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "뒤로가기",
+    Column(
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(color = KindMapTheme.colors.white)
+                .padding(horizontal = 15.dp),
+    ) {
+        Spacer(Modifier.height(27.dp))
+        Column(
+            horizontalAlignment = Alignment.Start,
+        ) {
+            IconButton(onClick = onBackPress) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "뒤로가기",
+                )
+            }
+            Column(
+                modifier = Modifier.padding(start = 17.dp),
+            ) {
+                Text(
+                    text = "Top 30 추천 랭킹",
+                    style = KindMapTheme.typography.title_b_24,
+                    color = KindMapTheme.colors.orange,
+                )
+                Text(
+                    text = "추천수 기반 착한 가게 둘러보기",
+                    style = KindMapTheme.typography.body_r_14,
+                    color = KindMapTheme.colors.orange,
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        LazyColumn(
+            // 세로 간격 14 !!!
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+            contentPadding = PaddingValues(bottom = 20.dp),
+        ) {
+            item {
+                Image(
+                    painter = painterResource(id = R.drawable.ranking_header),
+                    contentDescription = "Ranking Header Image",
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 10.dp),
+                    contentScale = ContentScale.FillWidth,
+                )
+                Spacer(modifier = Modifier.height(15.dp))
+            }
+            if (isLoading)
+                {
+                    item {
+                        Loading(
+                            modifier =
+                                Modifier
+                                    .fillMaxSize(),
+                            text = "랭킹을 불러오는 중입니다.",
                         )
                     }
-                },
-                colors =
-                    TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = KindMapTheme.colors.white,
-                        titleContentColor = KindMapTheme.colors.black,
-                    ),
-            )
-        },
-    ) { innerPadding ->
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(horizontal = 15.dp),
-            // 여백 !!! 15^^
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // 상단 이미지
-            Image(
-                painter = painterResource(id = R.drawable.ranking_header),
-                contentDescription = "Ranking Header Image",
-                modifier = Modifier.fillMaxWidth(),
-                contentScale = ContentScale.FillWidth,
-            )
-
-            Spacer(modifier = Modifier.height(30.dp))
-
-            LazyColumn(
-                // 세로 간격 14 !!!
-                verticalArrangement = Arrangement.spacedBy(14.dp),
-                contentPadding = PaddingValues(bottom = 20.dp),
-            ) {
+                } else {
                 itemsIndexed(rankedStores) { index, store ->
                     RankItem(
                         rank = index + 1,

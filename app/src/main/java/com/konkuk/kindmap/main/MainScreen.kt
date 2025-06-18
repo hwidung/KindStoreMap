@@ -14,6 +14,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,11 +49,6 @@ import com.konkuk.kindmap.map.NaverMapScreen
 import com.konkuk.kindmap.ui.theme.KindMapTheme
 import com.konkuk.kindmap.ui.util.HandleDoubleBackToExit
 import com.konkuk.kindmap.ui.util.SharedPrepare
-
-/**
- * @param onRankingClick: () -> Unit, // 랭킹 버튼 클릭 이벤트를 받기 위한 파라미터 추가
- * @param onMagazineClick: () -> Unit, // 매거진 버튼 클릭 이벤트를 받기 위한 파라미터 추가
- */
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -238,13 +234,4 @@ fun MainScreen(
         )
     }
      */
-}
-
-@Composable
-fun Row(
-    modifier: Modifier,
-    verticalAlignment: Alignment.Vertical,
-    content: @Composable () -> Unit,
-) {
-    TODO("Not yet implemented")
 }
