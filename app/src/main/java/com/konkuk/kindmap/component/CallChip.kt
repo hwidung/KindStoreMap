@@ -5,8 +5,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,9 +35,9 @@ fun CallChip(
             modifier
                 .background(
                     color = KindMapTheme.colors.orange,
-                    shape = RoundedCornerShape(10),
+                    shape = RoundedCornerShape(20),
                 )
-                .padding(horizontal = 5.dp, vertical = 3.dp)
+                .padding(horizontal = 7.dp, vertical = 6.dp)
                 .clickable {
                     val intent =
                         Intent(Intent.ACTION_DIAL).apply {
@@ -42,10 +48,17 @@ fun CallChip(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
+        Icon(
+            imageVector = Icons.Default.Call,
+            tint = KindMapTheme.colors.white,
+            contentDescription = null,
+            modifier = Modifier.size(15.dp),
+        )
+        Spacer(Modifier.width(1.dp))
         Text(
             text = "전화 걸기",
             color = KindMapTheme.colors.white,
-            style = KindMapTheme.typography.caption_m_9,
+            style = KindMapTheme.typography.detail_b_12,
         )
     }
 }

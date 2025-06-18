@@ -12,10 +12,8 @@ fun StoreEntity.toUiModel(): StoreUiModel {
         name = this.sh_name,
         address = this.sh_addr.ifBlank { null },
         phone = this.sh_phone.ifBlank { null },
-        // Todo: 자랑거리 필드 생기면 넣기
         description = null,
-        // Todo: 만약에 이미지 필드 생기면 넣기
-        imageUrl = null,
+        imageUrl = this.sh_image,
         latitude = this.latitude,
         longitude = this.longitude,
         geoHash = this.geohash,
