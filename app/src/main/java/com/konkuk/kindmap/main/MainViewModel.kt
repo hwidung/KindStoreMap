@@ -5,20 +5,16 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.common.config.GservicesValue.isInitialized
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.konkuk.kindmap.component.type.CategoryChipType
 import com.konkuk.kindmap.map.getCurrentLocation
-import com.konkuk.kindmap.model.StoreEntity
 import com.konkuk.kindmap.model.mapper.toUiModel
 import com.konkuk.kindmap.model.uimodel.StoreUiModel
 import com.konkuk.kindmap.repository.StoreRepository
 import com.naver.maps.geometry.LatLng
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -56,9 +52,8 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
+            initialValue = emptyList(),
         )
-
 
     fun init(
         context: Context,
@@ -66,7 +61,11 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
     ) {
     }
 
-    private fun findNearby(latitude: Double, longitude: Double, radiusKm: Double) {
+    private fun findNearby(
+        latitude: Double,
+        longitude: Double,
+        radiusKm: Double,
+    ) {
         viewModelScope.launch {
             val stores = repository.findNearby(latitude, longitude, radiusKm)
             _storeList.value = stores.map { it.toUiModel() }
@@ -84,7 +83,6 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
         }
     }
 
-
     fun findByCategoryCode(categoryCode: Long) {
         val category = CategoryChipType.entries.find { it.code == categoryCode }
         if (category != null) {
@@ -92,8 +90,10 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
         }
     }
 
-
-    fun searchNearbyStores(context: Context, fusedLocationClient: FusedLocationProviderClient) {
+    fun searchNearbyStores(
+        context: Context,
+        fusedLocationClient: FusedLocationProviderClient,
+    ) {
         viewModelScope.launch {
             try {
                 val currentLocation = getCurrentLocation(context, fusedLocationClient)
@@ -116,6 +116,7 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
             }
         }
     }
+
     fun clearSelectedStore() {
         _store.value = null
     }
@@ -125,5 +126,4 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
     companion object {
         const val CATEGORY_ALL = -1L
     }
-
 }

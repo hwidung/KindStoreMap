@@ -30,12 +30,14 @@ fun NaverMapScreen(
         modifier = modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState,
         locationSource = rememberFusedLocationSource(isCompassEnabled = true),
-        properties = MapProperties(
-            locationTrackingMode = LocationTrackingMode.NoFollow,
-        ),
-        uiSettings = MapUiSettings(
-            isLocationButtonEnabled = true,
-        ),
+        properties =
+            MapProperties(
+                locationTrackingMode = LocationTrackingMode.NoFollow,
+            ),
+        uiSettings =
+            MapUiSettings(
+                isLocationButtonEnabled = true,
+            ),
     ) {
         stores.forEach { store ->
             key(store.id) {
@@ -45,7 +47,7 @@ fun NaverMapScreen(
                     onClick = {
                         onMarkerClick(store)
                         true
-                    }
+                    },
                 )
             }
         }

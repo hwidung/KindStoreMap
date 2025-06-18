@@ -32,10 +32,10 @@ fun FAB(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             if (showFABAll) {
-                FloatingActionButton(onClick =  onMagazineClick ) {
+                FloatingActionButton(onClick = onMagazineClick) {
                     Text("매거진")
                 }
-                FloatingActionButton(onClick = onRankingClick ) {
+                FloatingActionButton(onClick = onRankingClick) {
                     Text("랭킹보기")
                 }
                 FloatingActionButton(onClick = { onReviewClick() }) {

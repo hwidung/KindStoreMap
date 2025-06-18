@@ -22,11 +22,11 @@ suspend fun getCurrentLocation(
 ): LatLng? {
     val hasPermission =
         ContextCompat.checkSelfPermission(
-            context, Manifest.permission.ACCESS_FINE_LOCATION
+            context, Manifest.permission.ACCESS_FINE_LOCATION,
         ) == PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(
-                    context, Manifest.permission.ACCESS_COARSE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(
+                context, Manifest.permission.ACCESS_COARSE_LOCATION,
+            ) == PackageManager.PERMISSION_GRANTED
 
     if (!hasPermission) {
         return null
@@ -34,22 +34,24 @@ suspend fun getCurrentLocation(
 
     // 최신 위치를 한 번만 요청하도록 수정
     return suspendCancellableCoroutine { continuation ->
-        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000L)
-            .setWaitForAccurateLocation(false)
-            .setMinUpdateIntervalMillis(5000L)
-            .setMaxUpdateDelayMillis(10000L)
-            .build()
+        val locationRequest =
+            LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000L)
+                .setWaitForAccurateLocation(false)
+                .setMinUpdateIntervalMillis(5000L)
+                .setMaxUpdateDelayMillis(10000L)
+                .build()
 
-        val locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-                val location = locationResult.lastLocation
-                if (location != null && continuation.isActive) {
-                    continuation.resume(LatLng(location.latitude, location.longitude))
+        val locationCallback =
+            object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    super.onLocationResult(locationResult)
+                    val location = locationResult.lastLocation
+                    if (location != null && continuation.isActive) {
+                        continuation.resume(LatLng(location.latitude, location.longitude))
+                    }
+                    fusedLocationClient.removeLocationUpdates(this)
                 }
-                fusedLocationClient.removeLocationUpdates(this)
             }
-        }
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
 
         continuation.invokeOnCancellation {

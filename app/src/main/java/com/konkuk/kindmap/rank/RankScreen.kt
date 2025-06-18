@@ -1,7 +1,14 @@
 package com.konkuk.kindmap.rank
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
@@ -25,7 +32,7 @@ import com.konkuk.kindmap.ui.theme.KindMapTheme
 @Composable
 fun RankScreen(
     modifier: Modifier = Modifier,
-    onBackPress: () -> Unit
+    onBackPress: () -> Unit,
 ) {
     val repository = remember { StoreRepository() }
     val viewModelFactory = remember { RankViewModelFactory(repository) }
@@ -42,39 +49,42 @@ fun RankScreen(
                     Text(
                         text = "추천수 기반 착한가게 둘러보기 [Top 30]",
                         style = KindMapTheme.typography.body_b_20,
-                        color = KindMapTheme.colors.orange)
+                        color = KindMapTheme.colors.orange,
+                    )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackPress) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "뒤로가기"
+                            contentDescription = "뒤로가기",
                         )
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = KindMapTheme.colors.white,
-                    titleContentColor = KindMapTheme.colors.black
-                )
+                colors =
+                    TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = KindMapTheme.colors.white,
+                        titleContentColor = KindMapTheme.colors.black,
+                    ),
             )
-        }
+        },
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 15.dp), // 여백 !!! 15^^
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 15.dp),
+            // 여백 !!! 15^^
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(20.dp))
-
 
             // 상단 이미지
             Image(
                 painter = painterResource(id = R.drawable.ranking_header),
                 contentDescription = "Ranking Header Image",
                 modifier = Modifier.fillMaxWidth(),
-                contentScale = ContentScale.FillWidth
+                contentScale = ContentScale.FillWidth,
             )
 
             Spacer(modifier = Modifier.height(30.dp))
@@ -82,16 +92,15 @@ fun RankScreen(
             LazyColumn(
                 // 세로 간격 14 !!!
                 verticalArrangement = Arrangement.spacedBy(14.dp),
-                contentPadding = PaddingValues(bottom = 20.dp)
+                contentPadding = PaddingValues(bottom = 20.dp),
             ) {
                 itemsIndexed(rankedStores) { index, store ->
                     RankItem(
                         rank = index + 1,
-                        store = store
+                        store = store,
                     )
                 }
             }
         }
     }
 }
-

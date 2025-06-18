@@ -46,7 +46,6 @@ class MainActivity : ComponentActivity() {
                     }
                 } else {
                     NavHost(navController = navController, startDestination = "main") {
-
                         composable("main") {
                             MainScreen(
                                 viewModel = rememberedViewModel,
@@ -55,7 +54,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onMagazineClick = {
                                     // TODO: 매거진 버튼 클릭
-                                }
+                                },
                             )
                         }
 
@@ -63,7 +62,7 @@ class MainActivity : ComponentActivity() {
                             RankScreen(
                                 onBackPress = {
                                     navController.navigateUp()
-                                }
+                                },
                             )
                         }
                     }
