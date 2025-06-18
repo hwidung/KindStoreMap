@@ -30,7 +30,6 @@ fun DetailBottomSheet(
     storeUiModel: StoreUiModel,
     onDismissRequest: () -> Unit,
     onSharedClick: () -> Unit,
-    selectedStar: Int?,
     modifier: Modifier = Modifier,
 ) {
     ModalBottomSheet(
@@ -39,7 +38,7 @@ fun DetailBottomSheet(
         containerColor = KindMapTheme.colors.white,
         scrimColor = KindMapTheme.colors.gray03.copy(alpha = 0.5f),
     ) {
-        DetailBottomSheetContent(storeUiModel, onSharedClick, selectedStar)
+        DetailBottomSheetContent(storeUiModel, onSharedClick)
     }
 }
 
@@ -47,7 +46,6 @@ fun DetailBottomSheet(
 fun DetailBottomSheetContent(
     storeUiModel: StoreUiModel,
     onSharedClick: () -> Unit,
-    selectedStar: Int?,
 ) {
     Box(
         modifier =
@@ -82,7 +80,7 @@ fun DetailBottomSheetContent(
                 )
                 Spacer(Modifier.width(10.dp))
                 Text(
-                    text = selectedStar.toString(),
+                    text = storeUiModel.recommendCount.toString(),
                     style = KindMapTheme.typography.body_r_16,
                     color = KindMapTheme.colors.black,
                 )

@@ -29,7 +29,6 @@ import com.google.android.gms.location.LocationServices
 import com.konkuk.kindmap.directions.DirectionsResponse
 import com.konkuk.kindmap.directions.DirectionsService
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.NaverMap
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.MarkerState
