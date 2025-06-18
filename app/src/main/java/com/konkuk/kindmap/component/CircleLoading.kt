@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.konkuk.kindmap.ui.theme.KindMapTheme
 
 @Composable
-fun Loading(
+fun CircleLoading(
     modifier: Modifier = Modifier,
     text: String = "",
 ) {

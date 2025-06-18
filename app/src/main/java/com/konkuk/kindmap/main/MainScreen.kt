@@ -30,6 +30,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.location.LocationServices
 import com.konkuk.kindmap.component.CategoryChip
+import com.konkuk.kindmap.component.CircleLoading
 import com.konkuk.kindmap.component.DetailBottomSheet
 import com.konkuk.kindmap.component.FAB
 import com.konkuk.kindmap.component.ReviewWebView
@@ -58,6 +59,7 @@ fun MainScreen(
     val selectedCategory by viewModel.selectedCategory.collectAsStateWithLifecycle()
     val selectedStore by viewModel.store.collectAsStateWithLifecycle()
     val cameraPosition by viewModel.cameraPosition.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
@@ -132,6 +134,13 @@ fun MainScreen(
             onRankingClick = onRankingClick,
             onReviewClick = { webViewVisible = true },
         )
+
+        if (isLoading) {
+            CircleLoading(
+                text = "가게를 불러오는 중입니다.",
+                modifier = Modifier.align(Alignment.Center),
+            )
+        }
     }
 
     selectedStore?.takeIf { bottomSheetVisibility }?.let { store ->

@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.konkuk.kindmap.R
-import com.konkuk.kindmap.component.Loading
+import com.konkuk.kindmap.component.CircleLoading
 import com.konkuk.kindmap.repository.StoreRepository
 import com.konkuk.kindmap.ui.theme.KindMapTheme
 
@@ -101,7 +101,7 @@ fun RankScreen(
             }
             if (isLoading) {
                 item {
-                    Loading(
+                    CircleLoading(
                         modifier =
                             Modifier
                                 .fillMaxSize(),

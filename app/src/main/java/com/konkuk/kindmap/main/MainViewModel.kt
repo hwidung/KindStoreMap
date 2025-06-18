@@ -12,6 +12,7 @@ import com.konkuk.kindmap.model.mapper.toUiModel
 import com.konkuk.kindmap.model.uimodel.StoreUiModel
 import com.konkuk.kindmap.repository.StoreRepository
 import com.naver.maps.geometry.LatLng
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -40,6 +41,9 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
     private val _cameraPosition = MutableStateFlow<LatLng?>(null)
     val cameraPosition: StateFlow<LatLng?> = _cameraPosition
 
+    private val _isLoading = MutableStateFlow<Boolean>(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     val storeList: StateFlow<List<StoreUiModel>> =
         combine(_storeList, _selectedCategory) { stores, category ->
             when (category) {
@@ -52,26 +56,31 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
             initialValue = emptyList(),
         )
 
+    init {
+        _isLoading.value = true
+
+        if (repository.isInitialized.value) {
+            _isLoading.value = false
+        } else {
+            viewModelScope.launch {
+                repository.isInitialized.collect { initialized ->
+                    if (initialized) {
+                        _isLoading.value = false
+                        cancel()
+                    }
+                }
+            }
+        }
+    }
+
     fun init(
         context: Context,
         fusedLocationClient: FusedLocationProviderClient,
     ) {
     }
 
-    private fun findNearby(
-        latitude: Double,
-        longitude: Double,
-        radiusKm: Double,
-    ) {
-        viewModelScope.launch {
-            val stores = repository.findNearby(latitude, longitude, radiusKm)
-            _storeList.value = stores.map { it.toUiModel() }
-            Log.d("viewModel", "Nearby Store Count: ${stores.size}")
-        }
-    }
-
     fun findById(id: Long) {
-        viewModelScope.launch {
+        launchWithLoading {
             val storeEntity = repository.findById(id)
             _store.value = storeEntity?.toUiModel()
             if (storeEntity != null) {
@@ -90,7 +99,7 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
         context: Context,
         fusedLocationClient: FusedLocationProviderClient,
     ) {
-        viewModelScope.launch {
+        launchWithLoading {
             try {
                 val (lat, lng) = getSearchCoordinates(context, fusedLocationClient)
                 val stores = repository.findNearby(lat, lng, radiusKm = 2.0)
@@ -101,6 +110,10 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
                 _storeList.value = emptyList()
             }
         }
+    }
+
+    fun clearSelectedStore() {
+        _store.value = null
     }
 
     private suspend fun getSearchCoordinates(
@@ -116,13 +129,14 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
         }
     }
 
-    fun clearSelectedStore() {
-        _store.value = null
-    }
-
-    // Todo : 지도 관련 findNearby, findByIndutyCodeAndNearby 는 지도하시면서 추가해주세요.
-
-    companion object {
-        const val CATEGORY_ALL = -1L
+    private fun launchWithLoading(block: suspend () -> Unit) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                block()
+            } finally {
+                _isLoading.value = false
+            }
+        }
     }
 }

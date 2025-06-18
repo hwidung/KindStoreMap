@@ -7,17 +7,21 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.konkuk.kindmap.model.StoreEntity
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class StoreRepository {
     private var cachedStores: List<StoreEntity> = emptyList()
-    private var isInitialized = false
+
+    private val _isInitialized = MutableStateFlow(false)
+    val isInitialized: StateFlow<Boolean> get() = _isInitialized
 
     init {
         initialize()
     }
 
     private fun initialize() {
-        if (isInitialized) return
+        if (_isInitialized.value) return
         val database = FirebaseDatabase.getInstance()
         val storesRef = database.getReference("STORE")
 
@@ -29,12 +33,13 @@ class StoreRepository {
                             it.getValue(StoreEntity::class.java)
                         }
                     cachedStores = stores
-                    isInitialized = true
+                    _isInitialized.value = true
                     Log.d("StoreRepository", "모든 가게 데이터 ${stores.size}개 캐싱 완료")
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     Log.e("StoreRepository", "데이터 캐싱 실패", error.toException())
+                    _isInitialized.value = true
                 }
             },
         )
@@ -45,7 +50,7 @@ class StoreRepository {
         longitude: Double,
         radiusKm: Double,
     ): List<StoreEntity> {
-        while (!isInitialized) {
+        while (!_isInitialized.value) {
             delay(100)
         }
 
@@ -62,7 +67,7 @@ class StoreRepository {
         lat2: Double,
         lon2: Double,
     ): Double {
-        val R = 6371
+        val r = 6371
         val latDistance = Math.toRadians(lat2 - lat1)
         val lonDistance = Math.toRadians(lon2 - lon1)
         val a =
@@ -70,18 +75,18 @@ class StoreRepository {
                 Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
                 Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2)
         val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-        return R * c
+        return r * c
     }
 
     suspend fun findById(id: Long): StoreEntity? {
-        while (!isInitialized) {
+        while (!_isInitialized.value) {
             delay(100)
         }
         return cachedStores.find { it.sh_id.toLong() == id }
     }
 
     suspend fun findAll(): List<StoreEntity> {
-        while (!isInitialized) {
+        while (!_isInitialized.value) {
             delay(100)
         }
         return cachedStores
