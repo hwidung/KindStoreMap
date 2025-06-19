@@ -38,7 +38,7 @@ fun NaverMapScreen(
         if (!cameraPositionState.isMoving) {
             val center = cameraPositionState.position.target
             Log.d("NaverMapScreen", "Camera idle at: $center")
-            onCameraIdle(center) // 👈 중앙 좌표 전달
+            onCameraIdle(center) //  중앙 좌표 전달
         }
     }
 
