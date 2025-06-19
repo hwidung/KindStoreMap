@@ -48,7 +48,6 @@ fun FAB(
     var showRanking by remember { mutableStateOf(false) }
     var showMagazine by remember { mutableStateOf(false) }
 
-    // 순차 애니메이션
     LaunchedEffect(showFABAll) {
         if (showFABAll) {
             showReview = true
@@ -134,7 +133,7 @@ fun FAB(
             ) {
                 Icon(
                     imageVector = fabIcon,
-                    tint = KindMapTheme.colors.black,
+                    tint = KindMapTheme.colors.white,
                     contentDescription = null,
                 )
             }

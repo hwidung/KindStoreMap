@@ -126,20 +126,6 @@ fun DetailBottomSheetContent(
                         }
                         Spacer(Modifier.height(14.dp))
                     }
-                    storeUiModel.description?.let {
-                        Text(
-                            text = "자랑거리",
-                            style = KindMapTheme.typography.body_eb_16,
-                            color = KindMapTheme.colors.gray03,
-                        )
-                        Spacer(Modifier.height(10.dp))
-                        Text(
-                            text = it,
-                            style = KindMapTheme.typography.body_r_16,
-                            color = KindMapTheme.colors.gray03,
-                        )
-                        Spacer(Modifier.height(14.dp))
-                    }
                     storeUiModel.imageUrl?.let {
                         Text(
                             text = "가게 사진",
@@ -153,6 +139,36 @@ fun DetailBottomSheetContent(
                         )
                         Spacer(Modifier.height(14.dp))
                     }
+                    storeUiModel.information?.takeIf { it.isNotBlank() && it != "null" }?.let {
+                        Text(
+                            text = "가게 정보",
+                            style = KindMapTheme.typography.body_eb_16,
+                            color = KindMapTheme.colors.gray03,
+                        )
+                        Spacer(Modifier.height(10.dp))
+                        Text(
+                            text = it,
+                            style = KindMapTheme.typography.body_r_16,
+                            color = KindMapTheme.colors.gray03,
+                        )
+                        Spacer(Modifier.height(14.dp))
+                    }
+
+                    storeUiModel.pride?.takeIf { it.isNotBlank() && it != "null" }?.let {
+                        Text(
+                            text = "자랑거리",
+                            style = KindMapTheme.typography.body_eb_16,
+                            color = KindMapTheme.colors.gray03,
+                        )
+                        Spacer(Modifier.height(10.dp))
+                        Text(
+                            text = it,
+                            style = KindMapTheme.typography.body_r_16,
+                            color = KindMapTheme.colors.gray03,
+                        )
+                        Spacer(Modifier.height(14.dp))
+                    }
+
                     storeUiModel.keywords.let {
                         if (it.isNotEmpty()) {
                             Text(
@@ -192,6 +208,7 @@ fun DetailBottomSheetContent(
                             }
                         }
                     }
+                    Spacer(Modifier.height(80.dp))
                 }
             }
         }

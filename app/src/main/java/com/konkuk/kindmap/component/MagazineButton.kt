@@ -24,7 +24,7 @@ fun MagazineButton(
             modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(9.dp))
-                .background(KindMapTheme.colors.markerOrange)
+                .background(KindMapTheme.colors.orange)
                 .padding(vertical = 5.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
