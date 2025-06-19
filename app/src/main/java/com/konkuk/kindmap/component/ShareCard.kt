@@ -29,7 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.core.view.drawToBitmap
+import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.konkuk.kindmap.R
 import com.konkuk.kindmap.component.type.CategoryChipType
 import com.konkuk.kindmap.model.uimodel.StoreUiModel
@@ -44,6 +46,10 @@ fun ShareCard(
 ) {
     val context = LocalContext.current
     val captureRef = remember { mutableStateOf<ComposeView?>(null) }
+    val imageLoader = ImageLoader.Builder(LocalContext.current)
+        .bitmapConfig(Bitmap.Config.ARGB_8888)
+        .build()
+
     Dialog(
         onDismissRequest = onDismissRequest,
     ) {
@@ -56,7 +62,10 @@ fun ShareCard(
                     ComposeView(ctx).apply {
                         captureRef.value = this
                         setContent {
-                            ShareCardContent(storeUiModel = storeUiModel)
+                            ShareCardContent(
+                                storeUiModel = storeUiModel,
+                                imageLoader = imageLoader
+                            )
                         }
                     }
                 },
@@ -73,7 +82,7 @@ fun ShareCard(
                         .padding(horizontal = 13.dp, vertical = 7.dp)
                         .clickable {
                             captureRef.value?.let { composeView ->
-                                val bitmap = composeView.drawToBitmap()
+                                val bitmap = composeView.drawToBitmap(config = Bitmap.Config.ARGB_8888)
                                 onSharedClick(bitmap)
                             }
                         },
@@ -93,6 +102,7 @@ fun ShareCard(
 @Composable
 fun ShareCardContent(
     storeUiModel: StoreUiModel?,
+    imageLoader: ImageLoader,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -140,15 +150,19 @@ fun ShareCardContent(
                 )
             } else {
                 AsyncImage(
-                    model = storeUiModel.imageUrl,
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(storeUiModel.imageUrl)
+                        .placeholder(R.drawable.cert_img)
+                        .error(R.drawable.cert_img)
+                        .bitmapConfig(Bitmap.Config.ARGB_8888)
+                        .build(),
+                    imageLoader = imageLoader,
                     contentDescription = null,
                     modifier =
                         Modifier
                             .padding(horizontal = 70.dp)
                             .heightIn(max = 200.dp)
                             .background(color = Color.Unspecified, shape = RoundedCornerShape(30)),
-                    placeholder = painterResource(R.drawable.cert_img),
-                    error = painterResource(R.drawable.cert_img),
                 )
             }
             Spacer(Modifier.height(25.dp))
