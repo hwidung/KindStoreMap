@@ -1,13 +1,16 @@
 package com.konkuk.kindmap.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -51,7 +54,7 @@ fun DetailBottomSheetContent(
         modifier =
             Modifier
                 .fillMaxSize()
-                .padding(start = 14.dp, end = 14.dp, bottom = 27.dp),
+                .padding(start = 14.dp, end = 14.dp, bottom = 10.dp),
     ) {
         Column(
             modifier =
@@ -78,71 +81,136 @@ fun DetailBottomSheetContent(
                     contentDescription = null,
                     tint = Color.Unspecified,
                 )
-                Spacer(Modifier.width(10.dp))
+                Spacer(Modifier.width(3.dp))
                 Text(
                     text = storeUiModel.recommendCount.toString(),
-                    style = KindMapTheme.typography.body_r_16,
+                    style = KindMapTheme.typography.body_eb_16,
                     color = KindMapTheme.colors.black,
                 )
             }
             Spacer(Modifier.height(20.dp))
-            storeUiModel.address?.let {
-                Text(
-                    text = "위치",
-                    style = KindMapTheme.typography.body_eb_16,
-                    color = KindMapTheme.colors.gray03,
-                )
-                Text(
-                    text = it,
-                    style = KindMapTheme.typography.body_r_16,
-                    color = KindMapTheme.colors.gray03,
-                )
-            }
-            Spacer(Modifier.height(14.dp))
-            storeUiModel.phone?.let {
-                Text(
-                    text = "전화번호",
-                    style = KindMapTheme.typography.body_eb_16,
-                    color = KindMapTheme.colors.gray03,
-                )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = it,
-                        style = KindMapTheme.typography.body_r_16,
-                        color = KindMapTheme.colors.gray03,
-                    )
-                    Spacer(Modifier.width(9.dp))
-                    CallChip(
-                        phoneNumber = it,
-                    )
+            LazyColumn {
+                item {
+                    storeUiModel.address?.let {
+                        Text(
+                            text = "위치",
+                            style = KindMapTheme.typography.body_eb_16,
+                            color = KindMapTheme.colors.gray03,
+                        )
+                        Spacer(Modifier.height(10.dp))
+                        Text(
+                            text = it,
+                            style = KindMapTheme.typography.body_r_16,
+                            color = KindMapTheme.colors.gray03,
+                        )
+                        Spacer(Modifier.height(14.dp))
+                    }
+                    storeUiModel.phone?.let {
+                        Text(
+                            text = "전화번호",
+                            style = KindMapTheme.typography.body_eb_16,
+                            color = KindMapTheme.colors.gray03,
+                        )
+                        Spacer(Modifier.height(10.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = it,
+                                style = KindMapTheme.typography.body_r_16,
+                                color = KindMapTheme.colors.gray03,
+                            )
+                            Spacer(Modifier.width(9.dp))
+                            CallChip(
+                                phoneNumber = it,
+                            )
+                        }
+                        Spacer(Modifier.height(14.dp))
+                    }
+                    storeUiModel.imageUrl?.let {
+                        Text(
+                            text = "가게 사진",
+                            style = KindMapTheme.typography.body_eb_16,
+                            color = KindMapTheme.colors.gray03,
+                        )
+                        Spacer(Modifier.height(10.dp))
+                        AsyncImage(
+                            model = storeUiModel.imageUrl,
+                            contentDescription = null,
+                        )
+                        Spacer(Modifier.height(14.dp))
+                    }
+                    storeUiModel.information?.takeIf { it.isNotBlank() && it != "null" }?.let {
+                        Text(
+                            text = "가게 정보",
+                            style = KindMapTheme.typography.body_eb_16,
+                            color = KindMapTheme.colors.gray03,
+                        )
+                        Spacer(Modifier.height(10.dp))
+                        Text(
+                            text = it,
+                            style = KindMapTheme.typography.body_r_16,
+                            color = KindMapTheme.colors.gray03,
+                        )
+                        Spacer(Modifier.height(14.dp))
+                    }
+
+                    storeUiModel.pride?.takeIf { it.isNotBlank() && it != "null" }?.let {
+                        Text(
+                            text = "자랑거리",
+                            style = KindMapTheme.typography.body_eb_16,
+                            color = KindMapTheme.colors.gray03,
+                        )
+                        Spacer(Modifier.height(10.dp))
+                        Text(
+                            text = it,
+                            style = KindMapTheme.typography.body_r_16,
+                            color = KindMapTheme.colors.gray03,
+                        )
+                        Spacer(Modifier.height(14.dp))
+                    }
+
+                    storeUiModel.keywords.let {
+                        if (it.isNotEmpty()) {
+                            Text(
+                                text = "키워드",
+                                style = KindMapTheme.typography.body_eb_16,
+                                color = KindMapTheme.colors.gray03,
+                            )
+                            Spacer(Modifier.height(10.dp))
+                            FlowRow(
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                verticalArrangement = Arrangement.spacedBy(6.dp),
+                            ) {
+                                it.forEach {
+                                    KeywordChip(it)
+                                }
+                            }
+                        }
+                        Spacer(Modifier.height(14.dp))
+                    }
+                    storeUiModel.menus.let {
+                        if (it.isNotEmpty()) {
+                            Text(
+                                text = "가격표",
+                                style = KindMapTheme.typography.body_eb_16,
+                                color = KindMapTheme.colors.gray03,
+                            )
+                            Column {
+                                it.forEach {
+                                    Spacer(Modifier.height(10.dp))
+                                    Row {
+                                        MenuChip(
+                                            name = it.im_name,
+                                            price = it.im_price.toString(),
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    Spacer(Modifier.height(80.dp))
                 }
-            }
-            Spacer(Modifier.height(14.dp))
-            storeUiModel.description?.let {
-                Text(
-                    text = "자랑거리",
-                    style = KindMapTheme.typography.body_eb_16,
-                    color = KindMapTheme.colors.gray03,
-                )
-                Text(
-                    text = it,
-                    style = KindMapTheme.typography.body_r_16,
-                    color = KindMapTheme.colors.gray03,
-                )
-            }
-            Spacer(Modifier.height(14.dp))
-            storeUiModel.imageUrl?.let {
-                Text(
-                    text = "가게 사진",
-                    style = KindMapTheme.typography.body_eb_16,
-                    color = KindMapTheme.colors.gray03,
-                )
-                AsyncImage(
-                    model = storeUiModel.imageUrl,
-                    contentDescription = null,
-                )
             }
         }
         ShareChip(

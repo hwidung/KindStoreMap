@@ -79,46 +79,11 @@ enum class CategoryChipType(
         code = 8,
         chipRes = R.drawable.chip_sleep,
     ),
-    Movie(
-        iconRes = R.drawable.movie,
-        text = "영화관람",
-        markerTextColor = kindMapColors.black,
-        code = 13,
-        chipRes = R.drawable.chip_movie,
-    ),
-    VTR(
-        iconRes = R.drawable.vtr,
-        text = "VTR대여",
-        markerTextColor = kindMapColors.black,
-        code = 13,
-        chipRes = R.drawable.chip_vtr,
-    ),
-    Music(
-        iconRes = R.drawable.music,
-        text = "노래방",
-        markerTextColor = kindMapColors.black,
-        code = 13,
-        chipRes = R.drawable.chip_music,
-    ),
-    Play(
-        iconRes = R.drawable.play,
-        text = "수영장/볼링장/당구장/골프연습장",
-        markerTextColor = kindMapColors.black,
-        code = 13,
-        chipRes = R.drawable.chip_play,
-    ),
     OtherService(
         iconRes = R.drawable.more,
         text = "기타서비스업",
         markerColor = kindMapColors.markerPurple,
         code = 13,
         chipRes = R.drawable.chip_etc,
-    ),
-    Etc(
-        text = "기타",
-        markerTextColor = kindMapColors.black,
-        // Todo : 기타 code
-        code = -1,
-        chipRes = null,
     ),
 }

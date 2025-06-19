@@ -7,14 +7,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.konkuk.kindmap.R
 import com.konkuk.kindmap.model.uimodel.StoreUiModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
-import com.naver.maps.map.compose.*
+import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import com.naver.maps.map.compose.LocationTrackingMode
+import com.naver.maps.map.compose.MapProperties
+import com.naver.maps.map.compose.MapUiSettings
+import com.naver.maps.map.compose.Marker
+import com.naver.maps.map.compose.NaverMap
+import com.naver.maps.map.compose.rememberCameraPositionState
+import com.naver.maps.map.compose.rememberFusedLocationSource
+import com.naver.maps.map.compose.rememberMarkerState
 import com.naver.maps.map.overlay.OverlayImage
-import com.naver.maps.map.util.MarkerIcons
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
@@ -56,21 +62,21 @@ fun NaverMapScreen(
             ),
     ) {
         stores.forEach { store ->
-            //Log.d("MapMarkerDebug", "스토어 이름: ${store.name}, 위도: ${store.latitude}, 경도: ${store.longitude}, chipRes: ${store.category.chipRes}")
+            // Log.d("MapMarkerDebug", "스토어 이름: ${store.name}, 위도: ${store.latitude}, 경도: ${store.longitude}, chipRes: ${store.category.chipRes}")
 
             key(store.id) {
                 Marker(
                     state = rememberMarkerState(position = LatLng(store.latitude, store.longitude)),
                     captionText = store.name,
-                    icon = OverlayImage.fromResource(
-                        store.category.chipRes ?: R.drawable.ic_map_marker
-                    ),
+                    icon =
+                        OverlayImage.fromResource(
+                            store.category.chipRes ?: R.drawable.chip_null,
+                        ),
                     onClick = {
                         onMarkerClick(store)
                         true
-                    }
+                    },
                 )
-
             }
         }
     }

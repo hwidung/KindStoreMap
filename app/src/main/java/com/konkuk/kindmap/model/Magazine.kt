@@ -21,6 +21,6 @@ data class MagazinePage(
 
 // '더보기' 버튼
 data class RelatedFilter(
-    val button_text: String = "",
+    val button_text: String? = "이 조건으로 더 보기",
     val metadata: Map<String, Any> = emptyMap(),
 )
