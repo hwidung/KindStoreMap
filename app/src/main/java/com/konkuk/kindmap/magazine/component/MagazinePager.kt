@@ -1,6 +1,7 @@
 package com.konkuk.kindmap.magazine.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,14 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.konkuk.kindmap.component.MagazineButton
 import com.konkuk.kindmap.model.Magazine
 import com.konkuk.kindmap.model.MagazinePage
 import com.konkuk.kindmap.model.RelatedFilter
 import com.konkuk.kindmap.ui.theme.KindMapTheme
+import com.konkuk.kindmap.R
 
 @Composable
 fun MagazinePager(
@@ -104,22 +108,28 @@ fun MagazineItem(
         modifier =
             modifier
                 .fillMaxWidth()
+                .height(400.dp)
                 .shadow(4.dp, RoundedCornerShape(20.dp))
                 .clip(RoundedCornerShape(20.dp))
                 .background(KindMapTheme.colors.white)
                 .padding(horizontal = 24.dp, vertical = 14.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         AsyncImage(
-            model = page.image_url,
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(page.image_url)
+                .placeholder(R.drawable.img_placeholder)
+                .crossfade(true)
+                .build(),
             contentDescription = page.store_name,
             contentScale = ContentScale.Crop,
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(180.dp)
-                    .clip(RoundedCornerShape(16.dp)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp)
+                .clip(RoundedCornerShape(16.dp))
         )
+
 
         Spacer(modifier = Modifier.height(12.dp))
 

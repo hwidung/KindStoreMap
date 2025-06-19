@@ -24,16 +24,15 @@ fun MagazineButton(
         modifier =
             modifier
                 .fillMaxWidth()
-                .shadow(1.dp, RoundedCornerShape(9.dp))
                 .clip(RoundedCornerShape(9.dp))
-                .background(KindMapTheme.colors.yellow)
-                .padding(horizontal = 10.dp, vertical = 10.dp),
+                .background(KindMapTheme.colors.markerOrange)
+                .padding(vertical = 5.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
         Text(
             text = text,
-            style = KindMapTheme.typography.body_r_16,
+            style = KindMapTheme.typography.body_b_18,
             color = KindMapTheme.colors.white,
         )
     }

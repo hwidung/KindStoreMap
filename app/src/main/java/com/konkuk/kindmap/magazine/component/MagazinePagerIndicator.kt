@@ -21,14 +21,14 @@ fun MagazinePagerIndicator(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(9.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         repeat(pageCount) { index ->
             Box(
                 modifier =
                     Modifier
-                        .size(7.dp)
+                        .size(9.dp)
                         .clip(CircleShape)
                         .background(if (index == currentPage) KindMapTheme.colors.orange else KindMapTheme.colors.gray02),
             )
