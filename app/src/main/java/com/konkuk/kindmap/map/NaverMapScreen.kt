@@ -70,7 +70,7 @@ fun NaverMapScreen(
                     captionText = store.name,
                     icon =
                         OverlayImage.fromResource(
-                            store.category.chipRes ?: R.drawable.ic_map_marker,
+                            store.category.chipRes ?: R.drawable.chip_null,
                         ),
                     onClick = {
                         onMarkerClick(store)

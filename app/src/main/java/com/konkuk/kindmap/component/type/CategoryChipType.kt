@@ -117,8 +117,7 @@ enum class CategoryChipType(
     Etc(
         text = "기타",
         markerTextColor = kindMapColors.black,
-        // Todo : 기타 code
         code = -1,
-        chipRes = null,
+        chipRes = R.drawable.chip_null,
     ),
 }

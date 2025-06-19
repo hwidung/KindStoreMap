@@ -46,9 +46,10 @@ fun ShareCard(
 ) {
     val context = LocalContext.current
     val captureRef = remember { mutableStateOf<ComposeView?>(null) }
-    val imageLoader = ImageLoader.Builder(LocalContext.current)
-        .bitmapConfig(Bitmap.Config.ARGB_8888)
-        .build()
+    val imageLoader =
+        ImageLoader.Builder(LocalContext.current)
+            .bitmapConfig(Bitmap.Config.ARGB_8888)
+            .build()
 
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -64,7 +65,7 @@ fun ShareCard(
                         setContent {
                             ShareCardContent(
                                 storeUiModel = storeUiModel,
-                                imageLoader = imageLoader
+                                imageLoader = imageLoader,
                             )
                         }
                     }
@@ -150,12 +151,13 @@ fun ShareCardContent(
                 )
             } else {
                 AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(storeUiModel.imageUrl)
-                        .placeholder(R.drawable.cert_img)
-                        .error(R.drawable.cert_img)
-                        .bitmapConfig(Bitmap.Config.ARGB_8888)
-                        .build(),
+                    model =
+                        ImageRequest.Builder(LocalContext.current)
+                            .data(storeUiModel.imageUrl)
+                            .placeholder(R.drawable.cert_img)
+                            .error(R.drawable.cert_img)
+                            .bitmapConfig(Bitmap.Config.ARGB_8888)
+                            .build(),
                     imageLoader = imageLoader,
                     contentDescription = null,
                     modifier =
