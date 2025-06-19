@@ -133,7 +133,7 @@ fun ShareCardContent(
             }
             Spacer(Modifier.height(20.dp))
             CategoryChip(
-                categoryChipType = storeUiModel?.category ?: CategoryChipType.Etc,
+                categoryChipType = storeUiModel?.category ?: CategoryChipType.All,
                 onClick = {},
                 isSelected = true,
             )

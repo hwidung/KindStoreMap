@@ -8,7 +8,7 @@ fun StoreEntity.toUiModel(): StoreUiModel {
     return StoreUiModel(
         id = this.sh_id,
         categoryCode = this.induty_code_se,
-        category = CategoryChipType.entries.find { it.text == this.induty_code_se_name } ?: CategoryChipType.Etc,
+        category = CategoryChipType.entries.find { it.text == this.induty_code_se_name } ?: CategoryChipType.All,
         name = this.sh_name,
         address = this.sh_addr.ifBlank { null },
         phone = this.sh_phone.ifBlank { null },
