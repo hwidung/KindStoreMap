@@ -96,7 +96,7 @@ fun MainScreen(
             },
             onCameraIdle = { centerLatLng -> // 지도 스크롤 후 멈췄을 때 콜백
                 viewModel.searchNearbyStoresByLocation(centerLatLng)
-            }
+            },
         )
 
         Row(

@@ -1,12 +1,12 @@
 package com.konkuk.kindmap.map
 
 import android.R.attr.onClick
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.konkuk.kindmap.R
 import com.konkuk.kindmap.model.uimodel.StoreUiModel
 import com.naver.maps.geometry.LatLng

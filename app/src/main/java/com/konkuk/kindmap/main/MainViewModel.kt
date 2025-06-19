@@ -89,7 +89,6 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
         }
     }
 
-
     fun findByCategoryCode(categoryCode: Long) {
         CategoryChipType.entries.find { it.code == categoryCode }?.let {
             _selectedCategory.value = it
@@ -125,7 +124,6 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
             }
         }
     }
-
 
     fun clearSelectedStore() {
         _store.value = null
