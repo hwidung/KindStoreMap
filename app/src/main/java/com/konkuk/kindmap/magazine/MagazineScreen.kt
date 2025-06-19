@@ -1,15 +1,12 @@
 package com.konkuk.kindmap.magazine
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -23,22 +20,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.konkuk.kindmap.component.CircleLoading
 import com.konkuk.kindmap.magazine.component.MagazineExpandedTopBar
 import com.konkuk.kindmap.magazine.component.MagazineFoldedTopBar
-import com.konkuk.kindmap.magazine.component.MagazinePagerIndicator
+import com.konkuk.kindmap.magazine.component.MagazinePager
+import com.konkuk.kindmap.ui.theme.KindMapTheme
 import com.konkuk.kindmap.ui.util.toDp
 
 @Composable
-fun MagazineScreen(modifier: Modifier = Modifier) {
+fun MagazineScreen(
+    viewModel: MagazineViewModel,
+    modifier: Modifier = Modifier,
+) {
     val scrollState = rememberLazyListState()
     val expandedTopBarIndex = 0
     var topBarHeightPx by remember { mutableIntStateOf(0) }
     var isTopBarMeasured by remember { mutableStateOf(false) }
-    val pagerState =
-        rememberPagerState(
-            initialPage = 0,
-            pageCount = { 3 },
-        )
+
+    val magazineList by viewModel.magazines.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
     LaunchedEffect(isTopBarMeasured) {
         if (isTopBarMeasured) {
@@ -46,7 +47,7 @@ fun MagazineScreen(modifier: Modifier = Modifier) {
         }
     }
 
-    val showCollapsedTopBar by remember {
+    val showedFoldedTopBar by remember {
         derivedStateOf {
             if (!isTopBarMeasured || topBarHeightPx == 0) {
                 false
@@ -62,9 +63,10 @@ fun MagazineScreen(modifier: Modifier = Modifier) {
     Box(
         modifier =
             modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .background(color = KindMapTheme.colors.gray01),
     ) {
-        if (showCollapsedTopBar) {
+        if (showedFoldedTopBar) {
             MagazineFoldedTopBar(
                 modifier =
                     Modifier
@@ -92,23 +94,17 @@ fun MagazineScreen(modifier: Modifier = Modifier) {
         ) {
             item {
                 Spacer(modifier = Modifier.height(topBarHeightPx.toDp()))
-                // if (uiState.reviewList.isNotEmpty()) {
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),
-                ) { page ->
-                    MagazineScreen(
-                        // reviewItem = uiState.reviewList[page],
-                        modifier = Modifier.padding(horizontal = 20.dp),
+                magazineList.forEach { magazine ->
+                    Spacer(Modifier.height(20.dp))
+                    MagazinePager(
+                        magazine = magazine,
                     )
                 }
-                // }
-                Spacer(Modifier.height(11.dp))
-                MagazinePagerIndicator(
-                    pageCount = 3,
-                    currentPage = pagerState.currentPage,
-                )
             }
+        }
+
+        if (isLoading) {
+            CircleLoading(text = "매거진을 불러오는 중입니다.")
         }
     }
 }

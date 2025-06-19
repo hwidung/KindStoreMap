@@ -20,5 +20,7 @@ fun StoreEntity.toUiModel(): StoreUiModel {
         keywords = this.search_keywords,
         menus = this.items,
         recommendCount = this.sh_rcmn,
+        pride = this.sh_pride,
+        information = this.sh_info,
     )
 }

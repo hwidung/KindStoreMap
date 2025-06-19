@@ -14,4 +14,6 @@ data class StoreEntity(
     val search_keywords: List<String> = emptyList(),
     val items: List<Item> = emptyList(),
     val sh_image: String = "",
+    val sh_info: String = "",
+    val sh_pride: String = "",
 )

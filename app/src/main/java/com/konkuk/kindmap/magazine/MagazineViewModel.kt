@@ -22,6 +22,9 @@ class MagazineViewModelFactory(private val repository: MagazineRepository) : Vie
 }
 
 class MagazineViewModel(private val repository: MagazineRepository) : ViewModel() {
+    private val _isLoading = MutableStateFlow<Boolean>(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     private val _magazines = MutableStateFlow<List<Magazine>>(emptyList())
     val magazines: StateFlow<List<Magazine>> = _magazines.asStateFlow()
 
@@ -31,9 +34,11 @@ class MagazineViewModel(private val repository: MagazineRepository) : ViewModel(
 
     fun fetchAllMagazines() {
         viewModelScope.launch {
+            _isLoading.value = true
             repository.getAllMagazines()
                 .onSuccess { magazineList ->
                     _magazines.value = magazineList
+                    _isLoading.value = false
                 }
                 .onFailure { exception ->
                     Log.e("MagazineViewModel", "Failed to fetch magazines", exception)

@@ -28,7 +28,7 @@ fun MagazinePagerIndicator(
             Box(
                 modifier =
                     Modifier
-                        .size(5.dp)
+                        .size(7.dp)
                         .clip(CircleShape)
                         .background(if (index == currentPage) KindMapTheme.colors.orange else KindMapTheme.colors.gray02),
             )

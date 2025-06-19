@@ -19,4 +19,6 @@ data class StoreUiModel(
     val geoHash: String = "",
     val keywords: List<String> = emptyList(),
     val menus: List<Item> = emptyList(),
+    val pride: String?,
+    val information: String?,
 )

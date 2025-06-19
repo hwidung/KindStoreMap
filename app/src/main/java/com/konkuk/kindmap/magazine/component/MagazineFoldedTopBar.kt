@@ -28,7 +28,7 @@ fun MagazineFoldedTopBar(
                     color = KindMapTheme.colors.yellow,
                     shape = RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp),
                 )
-                .padding(start = 5.dp, top = 5.dp, bottom = 10.dp)
+                .padding(start = 10.dp, top = 10.dp, bottom = 15.dp)
                 .padding(WindowInsets.statusBars.asPaddingValues()),
         verticalArrangement = Arrangement.Center,
     ) {
@@ -36,7 +36,7 @@ fun MagazineFoldedTopBar(
             text = "editor pick ! 착한 가게 둘러보기",
             textAlign = TextAlign.Start,
             color = KindMapTheme.colors.white,
-            style = KindMapTheme.typography.body_r_16,
+            style = KindMapTheme.typography.title_b_22,
         )
     }
 }
