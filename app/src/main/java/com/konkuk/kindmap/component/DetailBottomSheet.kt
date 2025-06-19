@@ -3,6 +3,7 @@ package com.konkuk.kindmap.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -177,9 +178,9 @@ fun DetailBottomSheetContent(
                                 color = KindMapTheme.colors.gray03,
                             )
                             Spacer(Modifier.height(10.dp))
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(5.dp),
+                            FlowRow(
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                verticalArrangement = Arrangement.spacedBy(6.dp),
                             ) {
                                 it.forEach {
                                     KeywordChip(it)
