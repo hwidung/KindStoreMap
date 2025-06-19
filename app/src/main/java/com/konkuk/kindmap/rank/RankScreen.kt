@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -51,7 +52,8 @@ fun RankScreen(
             modifier
                 .fillMaxSize()
                 .background(color = KindMapTheme.colors.white)
-                .padding(horizontal = 15.dp),
+                .padding(horizontal = 15.dp)
+                .navigationBarsPadding(),
     ) {
         Spacer(Modifier.height(27.dp))
         Column(
