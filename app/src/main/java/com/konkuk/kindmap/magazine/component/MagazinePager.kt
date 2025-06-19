@@ -83,8 +83,6 @@ fun MagazinePager(
                 MagazineItem(
                     page = magazine.content_pages[page],
                     modifier = Modifier.padding(vertical = 8.dp),
-                    pageCount = magazine.content_pages.size,
-                    currentPage = pagerState.currentPage,
                 )
             }
             MagazinePagerIndicator(
@@ -107,8 +105,6 @@ fun MagazinePager(
 @Composable
 fun MagazineItem(
     page: MagazinePage,
-    pageCount: Int,
-    currentPage: Int,
     modifier: Modifier = Modifier,
 ) {
     Box(
