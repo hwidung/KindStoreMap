@@ -24,11 +24,22 @@ class RankViewModel(private val repository: StoreRepository) : ViewModel() {
     private val _rankedStores = MutableStateFlow<List<StoreUiModel>>(emptyList())
     val rankedStores: StateFlow<List<StoreUiModel>> = _rankedStores
 
+    private val _selectedStore = MutableStateFlow<StoreUiModel?>(null)
+    val selectedStore: StateFlow<StoreUiModel?> = _selectedStore
+
     private val _isLoading = MutableStateFlow<Boolean>(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
     init {
         loadTopRankedStores()
+    }
+
+    fun setSelectedStore(store: StoreUiModel) {
+        _selectedStore.value = store
+    }
+
+    fun clearSelectedStore() {
+        _selectedStore.value = null
     }
 
     private fun loadTopRankedStores(limit: Int = 30) {

@@ -2,6 +2,7 @@ package com.konkuk.kindmap.rank
 
 import android.R.attr.maxLines
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -30,6 +31,7 @@ fun RankItem(
     modifier: Modifier = Modifier,
     rank: Int,
     store: StoreUiModel,
+    onClick: (StoreUiModel) -> Unit,
 ) {
     Row(
         modifier =
@@ -37,7 +39,10 @@ fun RankItem(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(9.dp))
                 .background(KindMapTheme.colors.gray01)
-                .padding(horizontal = 10.dp, vertical = 6.dp),
+                .padding(horizontal = 10.dp, vertical = 6.dp)
+                .clickable {
+                    onClick(store)
+                },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(

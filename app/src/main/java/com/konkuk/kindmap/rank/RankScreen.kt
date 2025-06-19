@@ -1,5 +1,6 @@
 package com.konkuk.kindmap.rank
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,18 +22,24 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.konkuk.kindmap.R
 import com.konkuk.kindmap.component.CircleLoading
+import com.konkuk.kindmap.component.DetailBottomSheet
+import com.konkuk.kindmap.component.ShareCard
 import com.konkuk.kindmap.repository.StoreRepository
 import com.konkuk.kindmap.ui.theme.KindMapTheme
+import com.konkuk.kindmap.ui.util.SharedPrepare
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,6 +53,12 @@ fun RankScreen(
 
     val rankedStores by viewModel.rankedStores.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+
+    var bottomSheetVisibility by remember { mutableStateOf(false) }
+    var shareDialogVisibility by remember { mutableStateOf(false) }
+    val selectedStore by viewModel.selectedStore.collectAsStateWithLifecycle()
+
+    val context = LocalContext.current
 
     Column(
         modifier =
@@ -115,9 +128,39 @@ fun RankScreen(
                     RankItem(
                         rank = index + 1,
                         store = store,
+                        onClick = {
+                            viewModel.setSelectedStore(store)
+                            bottomSheetVisibility = true
+                        },
                     )
                 }
             }
+        }
+
+        selectedStore?.takeIf { bottomSheetVisibility }?.let { store ->
+            DetailBottomSheet(
+                storeUiModel = store,
+                onSharedClick = { shareDialogVisibility = true },
+                onDismissRequest = {
+                    bottomSheetVisibility = false
+                    viewModel.clearSelectedStore()
+                },
+            )
+        }
+
+        if (shareDialogVisibility) {
+            ShareCard(
+                storeUiModel = selectedStore,
+                onDismissRequest = { shareDialogVisibility = false },
+                onSharedClick = { bitmap ->
+                    SharedPrepare.prepareShare(
+                        context = context,
+                        bitmap = bitmap,
+                        onFailure = { Toast.makeText(context, "공유 실패", Toast.LENGTH_SHORT).show() },
+                    )
+                    shareDialogVisibility = false
+                },
+            )
         }
     }
 }
