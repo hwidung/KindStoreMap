@@ -87,6 +87,13 @@ fun MagazinePager(
                     currentPage = pagerState.currentPage,
                 )
             }
+            MagazinePagerIndicator(
+                modifier =
+                    Modifier
+                        .padding(vertical = 5.dp),
+                pageCount = magazine.content_pages.size,
+                currentPage = pagerState.currentPage,
+            )
             Spacer(modifier = Modifier.height(5.dp))
             MagazineButton(
                 text = magazine.related_filter?.button_text.toString(),
@@ -142,7 +149,7 @@ fun MagazineItem(
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = page.page_subtitle,
-                    style = KindMapTheme.typography.title_b_24,
+                    style = KindMapTheme.typography.title_b_22,
                     color = KindMapTheme.colors.black,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
@@ -159,13 +166,5 @@ fun MagazineItem(
                 )
             }
         }
-        MagazinePagerIndicator(
-            modifier =
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 8.dp),
-            pageCount = pageCount,
-            currentPage = currentPage,
-        )
     }
 }
