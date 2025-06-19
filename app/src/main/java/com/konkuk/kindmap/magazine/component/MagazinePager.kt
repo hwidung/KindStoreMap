@@ -1,6 +1,7 @@
 package com.konkuk.kindmap.magazine.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,6 +34,7 @@ import com.konkuk.kindmap.ui.theme.KindMapTheme
 @Composable
 fun MagazinePager(
     magazine: Magazine,
+    onClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val pagerState =
@@ -80,9 +82,15 @@ fun MagazinePager(
             HorizontalPager(
                 state = pagerState,
             ) { page ->
+                val currentPage = magazine.content_pages[page]
                 MagazineItem(
-                    page = magazine.content_pages[page],
-                    modifier = Modifier.padding(vertical = 8.dp),
+                    page = currentPage,
+                    modifier =
+                        Modifier
+                            .padding(vertical = 8.dp)
+                            .clickable {
+                                onClick(currentPage.sh_id)
+                            },
                 )
             }
             MagazinePagerIndicator(

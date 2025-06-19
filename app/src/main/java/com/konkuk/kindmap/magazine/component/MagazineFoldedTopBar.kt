@@ -36,7 +36,7 @@ fun MagazineFoldedTopBar(
             text = "editor pick ! 착한 가게 둘러보기",
             textAlign = TextAlign.Start,
             color = KindMapTheme.colors.white,
-            style = KindMapTheme.typography.title_b_22,
+            style = KindMapTheme.typography.suite_eb_20,
         )
     }
 }

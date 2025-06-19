@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
         val mainViewModel = ViewModelProvider(this, mainViewModelFactory).get(MainViewModel::class.java)
 
         val magazineRepository = MagazineRepository()
-        val magazineViewModelFactory = MagazineViewModelFactory(magazineRepository)
+        val magazineViewModelFactory = MagazineViewModelFactory(magazineRepository, storeRepository)
         val magazineViewModel = ViewModelProvider(this, magazineViewModelFactory).get(MagazineViewModel::class.java)
 
         setContent {
