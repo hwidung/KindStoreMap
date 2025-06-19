@@ -89,14 +89,6 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
         }
     }
 
-//    fun findByIndutyCodeAndNearby(indutyCode: Long, latitude: Double, longitude: Double, radiusKm: Double) {
-//        viewModelScope.launch {
-//            repository.findByIndutyCodeAndNearby(indutyCode, latitude, longitude, radiusKm).collectLatest { stores ->
-//                _storeList.value = stores.map { it.toUiModel() }
-//                Log.d("viewModel", "IndutyCode and Nearby Store Count: ${stores.size}")
-//            }
-//        }
-//    }
 
     fun findByCategoryCode(categoryCode: Long) {
         CategoryChipType.entries.find { it.code == categoryCode }?.let {
@@ -120,6 +112,20 @@ class MainViewModel(private val repository: StoreRepository) : ViewModel() {
             }
         }
     }
+
+    fun searchNearbyStoresByLocation(center: LatLng) {
+        viewModelScope.launch {
+            try {
+                val stores = repository.findNearby(center.latitude, center.longitude, radiusKm = 2.0)
+                _storeList.value = stores.map { it.toUiModel() }
+                Log.d("MainViewModel", "Nearby Store Count by camera: ${stores.size}")
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "Error fetching stores by camera center", e)
+                _storeList.value = emptyList()
+            }
+        }
+    }
+
 
     fun clearSelectedStore() {
         _store.value = null

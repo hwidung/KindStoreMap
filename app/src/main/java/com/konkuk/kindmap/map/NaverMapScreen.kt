@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.konkuk.kindmap.R
 import com.konkuk.kindmap.model.uimodel.StoreUiModel
 import com.naver.maps.geometry.LatLng
@@ -28,12 +29,22 @@ fun NaverMapScreen(
     stores: List<StoreUiModel>,
     cameraPosition: LatLng?,
     onMarkerClick: (StoreUiModel) -> Unit,
+    onCameraIdle: (LatLng) -> Unit,
 ) {
     val cameraPositionState = rememberCameraPositionState()
+    val currentCenter = cameraPositionState.position.target
 
     LaunchedEffect(cameraPosition) {
         if (cameraPosition != null) {
             cameraPositionState.animate(CameraUpdate.scrollTo(cameraPosition))
+        }
+    }
+
+    LaunchedEffect(cameraPositionState.isMoving) {
+        if (!cameraPositionState.isMoving) {
+            val center = cameraPositionState.position.target
+            Log.d("NaverMapScreen", "Camera idle at: $center")
+            onCameraIdle(center) //  중앙 좌표 전달
         }
     }
 
