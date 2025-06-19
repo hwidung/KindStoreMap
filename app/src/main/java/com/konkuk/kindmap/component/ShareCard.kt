@@ -106,6 +106,10 @@ fun ShareCardContent(
     imageLoader: ImageLoader,
     modifier: Modifier = Modifier,
 ) {
+    val isDefaultImage =
+        storeUiModel?.imageUrl.isNullOrBlank() ||
+            storeUiModel.imageUrl == "https://storage.googleapis.com/kindstoremap.firebasestorage.app/store_images/default_store.jpg"
+
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(10.dp),
@@ -144,7 +148,7 @@ fun ShareCardContent(
                 style = KindMapTheme.typography.head_b_30,
             )
             Spacer(Modifier.height(20.dp))
-            if (storeUiModel?.imageUrl.isNullOrEmpty()) {
+            if (isDefaultImage) {
                 Image(
                     painter = painterResource(id = R.drawable.cert_img),
                     contentDescription = null,
