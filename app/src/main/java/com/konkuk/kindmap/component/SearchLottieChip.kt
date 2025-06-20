@@ -57,6 +57,5 @@ fun SearchLottieChip(
 @Composable
 private fun SearchLottieChipPrev() {
     SearchLottieChip(
-        onClick = {},
     )
 }
