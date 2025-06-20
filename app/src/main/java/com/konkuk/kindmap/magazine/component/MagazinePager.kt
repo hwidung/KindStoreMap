@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.konkuk.kindmap.R
-import com.konkuk.kindmap.component.MagazineButton
 import com.konkuk.kindmap.model.Magazine
 import com.konkuk.kindmap.model.MagazinePage
 import com.konkuk.kindmap.ui.theme.KindMapTheme
@@ -100,11 +99,13 @@ fun MagazinePager(
                 pageCount = magazine.content_pages.size,
                 currentPage = pagerState.currentPage,
             )
+            /*
             Spacer(modifier = Modifier.height(5.dp))
             MagazineButton(
                 text = magazine.related_filter?.button_text.toString(),
                 modifier = Modifier.padding(horizontal = 10.dp),
             )
+             */
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
