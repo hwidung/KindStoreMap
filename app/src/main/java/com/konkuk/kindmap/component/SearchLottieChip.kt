@@ -1,9 +1,7 @@
 package com.konkuk.kindmap.component
 
-import android.R.attr.onClick
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -56,6 +54,5 @@ fun SearchLottieChip(
 @Preview
 @Composable
 private fun SearchLottieChipPrev() {
-    SearchLottieChip(
-    )
+    SearchLottieChip()
 }
