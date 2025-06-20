@@ -1,5 +1,6 @@
 package com.konkuk.kindmap.component
 
+import android.R.attr.onClick
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -25,7 +26,6 @@ import com.konkuk.kindmap.ui.theme.KindMapTheme
 
 @Composable
 fun SearchLottieChip(
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.search_lottie))
@@ -45,8 +45,7 @@ fun SearchLottieChip(
                     color = KindMapTheme.colors.gray01,
                     shape = CircleShape,
                 )
-                .padding(5.dp)
-                .clickable { onClick() },
+                .padding(5.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {

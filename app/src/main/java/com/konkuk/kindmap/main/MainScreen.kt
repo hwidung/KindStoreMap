@@ -107,16 +107,7 @@ fun MainScreen(
                     .align(Alignment.TopStart),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            SearchLottieChip(
-                onClick = {
-                    val isGranted = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    if (isGranted) {
-                        viewModel.searchNearbyStores(context, fusedLocationClient)
-                    } else {
-                        locationPermissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
-                    }
-                },
-            )
+            SearchLottieChip()
             Spacer(Modifier.width(10.dp))
             LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 items(CategoryChipType.entries) { category ->
