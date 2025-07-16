@@ -38,22 +38,26 @@ import kotlinx.coroutines.delay
 @Composable
 fun FAB(
     modifier: Modifier = Modifier,
+    onPrivacyClick: () -> Unit,
     onMagazineClick: () -> Unit,
     onRankingClick: () -> Unit,
     onReviewClick: () -> Unit,
 ) {
     var showFABAll by remember { mutableStateOf(false) }
 
+    var showPrivacy by remember { mutableStateOf(false) }
     var showReview by remember { mutableStateOf(false) }
     var showRanking by remember { mutableStateOf(false) }
     var showMagazine by remember { mutableStateOf(false) }
 
     LaunchedEffect(showFABAll) {
         if (showFABAll) {
+            showPrivacy = true
+            delay(70)
             showReview = true
-            delay(80)
+            delay(70)
             showRanking = true
-            delay(80)
+            delay(70)
             showMagazine = true
         } else {
             showMagazine = false
@@ -61,6 +65,8 @@ fun FAB(
             showRanking = false
             delay(50)
             showReview = false
+            delay(50)
+            showPrivacy = false
         }
     }
 
@@ -71,6 +77,24 @@ fun FAB(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.End,
         ) {
+            AnimatedVisibility(
+                visible = showPrivacy,
+                enter =
+                    fadeIn(tween(200)) +
+                        slideInVertically(
+                            initialOffsetY = { it / 2 },
+                            animationSpec = tween(300),
+                        ),
+                exit =
+                    fadeOut(tween(150)) +
+                        slideOutVertically(
+                            targetOffsetY = { it / 2 },
+                            animationSpec = tween(200),
+                        ),
+            ) {
+                FABItem(label = "개인정보\n처리방침", iconRes = R.drawable.ic_privacy_icon, onClick = onPrivacyClick)
+            }
+
             AnimatedVisibility(
                 visible = showReview,
                 enter =

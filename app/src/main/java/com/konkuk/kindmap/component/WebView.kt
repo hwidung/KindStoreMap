@@ -15,7 +15,7 @@ import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
 
 @Composable
-fun ReviewWebView(
+fun WebView(
     url: String,
     onClose: () -> Unit,
 ) {

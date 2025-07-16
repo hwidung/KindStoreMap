@@ -32,9 +32,9 @@ import com.konkuk.kindmap.component.CategoryChip
 import com.konkuk.kindmap.component.CircleLoading
 import com.konkuk.kindmap.component.DetailBottomSheet
 import com.konkuk.kindmap.component.FAB
-import com.konkuk.kindmap.component.ReviewWebView
 import com.konkuk.kindmap.component.SearchLottieChip
 import com.konkuk.kindmap.component.ShareCard
+import com.konkuk.kindmap.component.WebView
 import com.konkuk.kindmap.component.type.CategoryChipType
 import com.konkuk.kindmap.map.NaverMapScreen
 import com.konkuk.kindmap.ui.theme.KindMapTheme
@@ -52,7 +52,8 @@ fun MainScreen(
 ) {
     var bottomSheetVisibility by remember { mutableStateOf(false) }
     var shareDialogVisibility by remember { mutableStateOf(false) }
-    var webViewVisible by remember { mutableStateOf(false) }
+    var reviewWebViewVisible by remember { mutableStateOf(false) }
+    var privacyWebViewVisible by remember { mutableStateOf(false) }
 
     val storeList by viewModel.storeList.collectAsStateWithLifecycle()
     val selectedCategory by viewModel.selectedCategory.collectAsStateWithLifecycle()
@@ -126,7 +127,8 @@ fun MainScreen(
                     .navigationBarsPadding(),
             onMagazineClick = onMagazineClick,
             onRankingClick = onRankingClick,
-            onReviewClick = { webViewVisible = true },
+            onReviewClick = { reviewWebViewVisible = true },
+            onPrivacyClick = { privacyWebViewVisible = true },
         )
 
         if (isLoading) {
@@ -163,7 +165,11 @@ fun MainScreen(
         )
     }
 
-    if (webViewVisible) {
-        ReviewWebView(url = "https://goodprice.go.kr/cmnt/reviewList.do", onClose = { webViewVisible = false })
+    if (reviewWebViewVisible) {
+        WebView(url = "https://goodprice.go.kr/cmnt/reviewList.do", onClose = { reviewWebViewVisible = false })
+    }
+
+    if (privacyWebViewVisible) {
+        WebView(url = "https://secretive-stargazer-15c.notion.site/23014b7e1eff806d9952def2e4f4ae61", onClose = { privacyWebViewVisible = false })
     }
 }

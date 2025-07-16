@@ -54,6 +54,14 @@ fun SplashScreen(
             color = KindMapTheme.colors.white,
         )
         Spacer(modifier = Modifier.weight(356f))
+        Text(
+            text =
+                "본 앱은 정부 또는 공공기관의 공식 서비스가 아니며, \n데이터를 바탕으로 한 개인 개발 앱입니다.",
+            textAlign = TextAlign.Center,
+            style = KindMapTheme.typography.detail_r_12,
+            color = KindMapTheme.colors.white,
+        )
+        Spacer(modifier = Modifier.weight(40f))
     }
 }
 
